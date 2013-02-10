@@ -1,0 +1,17 @@
+log/*.log
+tmp
+tmp/**/*
+doc/**/*
+doc/*
+config/database.yml
+db/*.sqlite3
+db/schema.rb
+*~
+start
+*.swp
+*.swo
+features
+spec
+*.dat
+.bundle
+.vagrant

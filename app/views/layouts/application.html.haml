@@ -1,0 +1,43 @@
+!!! html
+%html
+  %head
+    %title Mails on Rails
+    = stylesheet_link_tag    "application", :media => "all"
+    = javascript_include_tag "application"
+    = csrf_meta_tags
+  %body
+    %header
+      %h1= link_to 'RMails', root_url
+    %section#search
+      = form_tag search_path do
+        = text_field_tag :q
+        = button_tag 'Search'
+    %nav.navbar.navbar-inverse
+      %ul.nav.btn-group
+        %li.btn.btn-inverse
+          %a
+            %i.icon-user
+            %span.text
+              Profile
+        %li.btn.btn-inverse
+          %a
+            %i.icon-share-alt
+            %span.text
+              Logout
+
+    %sidebar
+      %ul
+        %li.active
+          %a
+            %i.icon-home
+            Domů
+        %li
+          %a
+            %i.icon-home
+            Ven
+    %article
+      #header
+      #breadcrumb
+      #content.container-fluid
+
+    = yield

@@ -1,0 +1,103 @@
+#
+# System
+#
+mail_name = Rmails
+smtpd_banner = $myhostname ESMTP $mail_name
+biff = yes
+bounce_queue_lifetime = 5d
+maximal_queue_lifetime = 5d
+message_size_limit = <%= message_size_limit %>
+#transport_maps = <%= "#{adapter}:#{etc_postfix}/transport_maps.cf" %>
+
+# TOTO XXX: appending .domain is the MUA's job.
+append_dot_mydomain = no
+
+#
+# Authentication
+#
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_security_options = noanonymous
+#smtpd_sasl_local_domain = $mydomain
+unknown_local_recipient_reject_code = 450
+
+#
+# TLS parameters
+#
+smtp_use_tls = yes
+smtpd_use_tls = yes
+smtpd_tls_cert_file=/etc/ssl/postfix/smtpd.pem
+smtpd_tls_key_file=/etc/ssl/postfix/smtpd.key
+#smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+#smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+smtpd_tls_loglevel = 0
+smtpd_tls_received_header = yes
+smtpd_tls_session_cache_timeout = 3600s
+tls_random_source = dev:/dev/urandom
+
+#
+# Network
+#
+myhostname = <%= myhostname %>
+mydomain = <%= mydomain %>
+# list of IPs I trust
+mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
+inet_interfaces = loopback-only
+disable_dns_lookups = no
+relayhost =
+
+#
+# Local
+#
+myorigin = /etc/mailname
+mydestination = $mydomain, localhost
+local_recipient_maps '$alias_maps
+alias_maps = hash:/etc/aliases
+
+#
+# Mailbox
+#
+mailbox_command = <%= dovecot %>
+mailbox_size_limit = 0
+mail_spool_directory /var/spool/postfix
+recipient_delimiter = +
+
+
+# XXX
+#default_transport = error
+#relay_transport = error
+
+#
+# Virtual
+#
+
+## if DSPAM active
+#virtual_transport  = lmtp:inet:localhost:2424
+## else - use dovecot
+virtual_transport = dovecot
+
+dovecot_destination_recipient_limit = 1
+
+virtual_mailbox_domains = <%= "#{adapter}:#{root_path}/#{adapter}/virtual_mailbox_domains.cf" %>
+virtual_mailbox_maps = <%= "#{adapter}:#{root_path}/#{adapter}/virtual_mailbox_maps.cf" %>
+virtual_alias_maps = <%= "#{adapter}:#{root_path}/#{adapter}/virtual_alias_maps.cf" %>,<%= "#{adapter}:#{root_path}/#{adapter}/email2email.cf" %>
+smtpd_sender_login_maps = <%= "#{adapter}:#{root_path}/#{adapter}/sender_login_maps.cf" %>
+
+#
+# Restrictions
+#
+smtpd_recipient_restrictions = \
+    permit_mynetworks           \
+#    reject_rbl_client dnsbl.sorbs.net \
+#    reject_rbl_client bl.spamcop.net \
+#    reject_rbl_client zen.spamhaus.org    \
+    permit_sasl_authenticated   \
+    reject_unauth_destination
+
+
+smtpd_sender_restrictions = reject_sender_login_mismatch
+
+#
+# Appends from AutomateIt
+#

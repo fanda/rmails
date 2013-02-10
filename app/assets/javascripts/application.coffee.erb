@@ -1,0 +1,25 @@
+#= require ./lib/jquery
+#= require jquery_ujs
+#= require cocoon
+#= require ./canjs/can.jquery
+#= require ./lib/jquery_formparams
+#= require ./lib/jquery_input_hint
+#= require ./lib/jquery_paginate
+#= require ./lib/json2
+#= require ./lib/utils
+#= require ./lib/facebox
+#= require ./bootstrap_ini
+#= require_tree ./models
+#= require_tree ./controls
+#= require_self
+
+$(document).ready ->
+  $('a[rel*=facebox]').facebox({
+    loading_image : 'loading.gif',
+    close_image   : 'closelabel.gif'
+  })
+
+
+  return
+
+

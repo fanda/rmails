@@ -1,0 +1,13 @@
+driver = <%= adapter %>
+connect = <%= "host=#{host} dname=#{name} user=#{user} password=#{password}" %>
+
+default_pass_scheme = SSHA256 # PLAIN-MD5
+
+user_query = SELECT \
+  CONCAT('/var/vmail/%d/', maildir) AS home, \
+  5000 AS uid, 5000 AS gid, \
+  CONCAT('maildir:storage=',quota_kb,':messages=',quota_messages) AS quota \
+  'yes' as allow_all_users \
+  FROM virtual_users WHERE email='%u' AND domain = '%d';
+
+password_query = SELECT email as user, password FROM virtual_users WHERE email='%u';

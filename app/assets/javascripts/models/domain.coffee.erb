@@ -1,0 +1,25 @@
+window.Link = can.Model({
+  findAll : 'GET <%= Rails.application.routes.url_helpers.links_path %>'
+
+  findOne : ('GET ' + unescape('<%= Rails.application.routes.url_helpers.link_path('{id}') %>'))
+
+  create  : (attrs, link) ->
+    url = '<%= Rails.application.routes.url_helpers.links_path %>'
+    return $.post(url, attrs, (id) ->
+        link.attr('id', id)
+      , "json")
+
+  update  : (attrs, link ) ->
+    url = unescape('<%= Rails.application.routes.url_helpers.link_path('{id}') %>').replace('{id}', link.id)
+    return $.post(url, attrs, null, "json")
+
+  destroy : ('DELETE ' + unescape('<%= Rails.application.routes.url_helpers.link_path('{id}') %>'))
+
+
+  init: () ->
+    @validatePresenceOf ['title', 'url']
+
+}, {})
+
+window.Link.prototype.alert = () ->
+  alert('<%= I18n.t('alert.link') %>')

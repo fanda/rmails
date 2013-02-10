@@ -1,0 +1,41 @@
+
+LogFile="cat <%= logfile %> | prepflog.pl | maillogconvert.pl standard | grep <%= domain %> |"
+
+LogType=M
+LogFormat="%time2 %email %email_r %host %host_r %method %url %code %bytesd"
+SiteDomain="<%= domain %>"
+HostAliases="<%= domain %>"
+
+DirData="<%= outputs %>/<%= domain %>"
+
+LevelForBrowsersDetection=0
+LevelForOSDetection=0
+LevelForRefererAnalyze=0
+LevelForRobotsDetection=0
+LevelForWormsDetection=0
+LevelForSearchEnginesDetection=0
+LevelForFileTypesDetection=0
+ShowMenu=1
+ShowSummary=HB
+ShowMonthStats=HB
+ShowDaysOfMonthStats=HB
+ShowDaysOfWeekStats=HB
+ShowHoursStats=HB
+ShowDomainsStats=0
+ShowHostsStats=HBL
+ShowAuthenticatedUsers=0
+ShowRobotsStats=0
+ShowEMailSenders=HBML
+ShowEMailReceivers=HBML
+ShowSessionsStats=0
+ShowPagesStats=0
+ShowFileTypesStats=0
+ShowFileSizesStats=0
+ShowBrowsersStats=0
+ShowOSStats=0
+ShowOriginStats=0
+ShowKeyphrasesStats=0
+ShowKeywordsStats=0
+ShowMiscStats=0
+ShowHTTPErrorsStats=0
+ShowSMTPErrorsStats=1

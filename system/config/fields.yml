@@ -1,0 +1,40 @@
+# Put your fields here
+
+hostname: rmails.com
+postfix:
+  database:
+    adapter: pgsql
+    user: postfix
+    password: S0meP4ssw0rd
+    name: rmails
+    host: 127.0.0.1
+  message_size_limit: 15728640
+  mail_name: Rmails
+  myhostname: rmails.com
+  mydomain: rmails.com
+  smtpd_banner: "$myhostname ESMTP $mail_name"
+dovecot:
+  system:
+    user: vmail
+    id: 5000
+    home: "/var/vmail"
+  protocols: imap imaps pop3 pop3s
+  postmaster: fandisek@gmail.com
+  storage_size: 400M
+  trash_storage_size: 10%%
+  spam_storage_size: 10%%
+web:
+  prefer_www: false
+database:
+  host: localhost
+  port: 6711
+  max_connections: 111
+dspam:
+  delivery_port: 7711
+  database:
+    user: dspamer
+    password: S0meP4ssw0rd
+    name: dspam
+
+
+
