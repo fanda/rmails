@@ -1,0 +1,91 @@
+window.Aliases = can.Control({
+
+  init: (el, opts) ->
+    @el = el
+    @di = opts.domain_id
+    @dname = opts.domain_name
+    @model = opts.items
+    @refresh()
+
+  show_title: (type) ->
+    $(@el).find('h4 span').hide()
+    type = (if type.length then '_' else '') + type
+    $(@el).find('h4 .title' + type).show()
+
+  refresh: () ->
+    $(@el).find('table').html( can.view( 'aliass_each_EJS', {
+      items: @model
+      domain_name: @dname
+    } ) )
+
+  "form reset": (el, ev) ->
+    @refresh()
+    @show_title('')
+
+  ".edit-alias click": (el, ev) ->
+    ev.preventDefault()
+    @show_title('edit')
+    @el.find('.table tr').hide()
+    li = el.parents('tr')
+    id = li.attr('id').replace('alias_', '')
+    di = @model[id].virtual_domain_id
+    li.html(
+      can.view( 'aliass_form_EJS', { item: @model[id] } )
+    ).find('input[type=submit]').attr('value','<%=I18n.t('update')%>')
+    li.find('form').attr('action', (i, v) ->
+      return unescape(v).replace(/{domain_id}/g, di)
+    ).addClass('edit_alias')
+    li.show()
+    return false
+
+
+  ".edit_alias submit": (el, ev) ->
+    ev.preventDefault()
+    values = el.formParams()
+    id = el.parents('tr').attr('id').replace('alias_', '')
+    item = @model[id]
+    item.attr(values['virtual_alias'])
+    if item.errors()
+      item.alert()
+      return
+    Alias.update(values, item, el.attr('action'))
+    @show_title('')
+    @refresh()
+    return false
+
+
+  ".new-alias click": (el, ev) ->
+    ev.preventDefault()
+    @show_title('new')
+    @el.find('.table tr').hide()
+    di = @di
+    $('#domain_'+di+' .aliases .new').remove()
+    $('#domain_'+di+' .aliases table').prepend(can.view( 'aliass_tabr_EJS' ))
+    $('#domain_'+di+' .aliases .new').prepend(
+      can.view( 'aliass_form_EJS', { item: new Alias } )
+    ).find('form').attr('action', (i, v) ->
+      return unescape(v).replace(/{domain_id}/g, di)
+    )
+    @el.find('.table tr:first').show()
+    return false
+
+  ".new form submit": (el, ev) ->
+    ev.preventDefault()
+    li = el.parents('.new')
+    self = this
+    values = el.formParams()
+    item = new Alias(values["virtual_alias"])
+    if item.errors()
+      item.alert()
+      return
+    Alias.create(values, @di, (json) ->
+      if json["errors"]
+        alert(json["errors"])
+      else
+        li.removeClass('new').attr('id', 'alias_'+json.id)
+        self.model.unshift(item)
+        self.show_title('')
+        self.refresh()
+    )
+
+})

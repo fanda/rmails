@@ -1,0 +1,42 @@
+window.Admin = can.Model({
+  findAll : 'GET <%= Rails.application.routes.url_helpers.admin_users_path %>'
+
+  findOne : ('GET ' + unescape('<%= Rails.application.routes.url_helpers.admin_user_path('{id}') %>'))
+
+  create  : (attrs, callback) ->
+    url = '<%= Rails.application.routes.url_helpers.admin_users_path %>'
+    return $.post(url, attrs, callback, "json")
+
+  update  : ('PUT ' + unescape('<%= Rails.application.routes.url_helpers.admin_user_path('{id}') %>'))
+
+  destroy : ('DELETE ' + unescape('<%= Rails.application.routes.url_helpers.admin_user_path('{id}') %>'))
+
+  attributes: {
+    virtual_domains: 'Models.Domain.models'
+  },
+
+  init: () ->
+    @validatePresenceOf ['name', 'email']
+
+}, {
+
+  domain_ids: ->
+    ids = []
+    can.each @['domains'], (domain, index) ->
+      ids.push(domain.id)
+    ids
+
+})
+
+window.Admin.List = can.Model.List({
+  with_id: (id) ->
+    the_one = null
+    @each (admin) ->
+      if (admin.id == id)
+        the_one = admin
+        return admin
+    return the_one
+})
+
+window.Admin.prototype.alert = () ->
+  alert('<%= I18n.t('alert.admin') %>')

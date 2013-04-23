@@ -1,0 +1,12 @@
+- content_for :title do
+  &rarr;
+  = t('.first_admin_user')
+
+= simple_form_for @admin, :url => admin_users_path, :method => :post, :html => { :class => 'form-horizontal' } do |f|
+
+  = f.input :name, :label => t('.name')
+  = f.input :email, :label => t('.email')
+  = f.input :password, :label => t('.pass')
+  = f.input :password_confirmation, :label => t('.passs')
+
+  = f.button :button, t('.create'), :type => 'submit', :class => 'btn-primary'

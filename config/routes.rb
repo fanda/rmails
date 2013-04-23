@@ -1,4 +1,26 @@
 Rmails::Application.routes.draw do
+
+  devise_for :admin_users, :skip => :registrations
+
+  resources :admin_users, :only => [:index, :create, :update]
+  match 'admin_users/first' => 'admin_users#first',
+             :as => 'first_admin_user'
+
+  resources :domains do
+    resources :users
+    resources :aliases
+  end
+
+  match 'server' => 'server#index',
+             :as => 'server'
+  match 'server/config/:id' => 'server#property',
+             :as => 'server_property'
+  match 'server/save_config' => 'server#update',
+             :as => 'server_update'
+
+
+  root :to => 'domains#index'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

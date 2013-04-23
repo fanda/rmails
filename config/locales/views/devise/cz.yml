@@ -1,0 +1,26 @@
+cz:
+  devise:
+    sessions:
+      new:
+        title: Přihlášení správce
+        sign_in: Přihlásit
+    shared:
+      links:
+        sign_in: Přihlášení
+        sign_up: Registrace
+        password: Zapomenuté heslo
+        unlock: Instrukce k odemčení
+        omniauth: Přihlásit s
+    passwords:
+      edit:
+        title: Change your password
+        submit: Change my password
+        confirm: Confirm your new password
+        new_pass: New password
+      new:
+        title: Obnova zapomenutého hesla
+        submit: Poslat instrukce k obnově hesla
+    unlocks:
+      new:
+        title: Zaslání instrukcí k odemčení účtu
+        submit: Zaslat instrukce

@@ -1,0 +1,21 @@
+cz:
+  server:
+    help:
+      disable_plaintext_auth: Disable LOGIN command and all other plaintext authentications unless SSL/TLS is used (LOGINDISABLED capability).
+      auth_username_chars: List of allowed characters in username. If the user-given username contains a character not listed in here, the login automatically fails. If you want to allow all characters, set this value to empty.
+      auth_worker_max_count: Maximum number of dovecot-auth worker processes. They're used to execute blocking passdb and userdb queries (eg. MySQL and PAM). They're automatically created and destroyed as needed.
+      auth_mechanisms: Space separated list of wanted authentication mechanisms (plain login digest-md5 cram-md5 ntlm rpa apop anonymous gssapi otp skey gss-spnego).
+      auth_verbose: Log unsuccessful authentication attempts and the reasons why they failed.
+      mail_cache_min_mail_count: The minimum number of mails in a mailbox before updates are done to cache file. This allows optimizing Dovecot's behavior to do less disk writes at the cost of more disk reads.
+
+      postmaster_address: Address to use when sending rejection mails.
+
+      quota_full_tempfail: If user is over quota, return with temporary failure instead of bouncing the mail.
+
+      rejection_subject: Subject- header to use for rejection mails.
+      rejection_reason: Human readable error message for rejection mails.
+      rejection_variables: "%n = CRLF, %r = reason, %s = original subject, %t = recipient"
+
+
+
+

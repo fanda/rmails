@@ -1,0 +1,105 @@
+window.Admins = can.Control({
+
+  init: (el, opt) ->
+    @opt = opt
+    @model = Admin.models JSON.parse($('#admins_JSON').text())
+    return
+
+  "form reset": (el, ev) ->
+    li = el.parents('li')
+    if li.hasClass('empty')
+      $('#admins .empty').remove()
+      $('.add-admin').toggle()
+    else
+      ev.preventDefault()
+      la = li.find('.manage')
+      txt = la.text()
+      la.text(la.data('inverse'))
+      la.data('inverse', txt)
+      la.addClass('label-info')
+      li.find('.item-content:last').remove()
+
+  ".add-admin click": (el, ev) ->
+    ev.preventDefault()
+    $('#admins .empty').remove()
+    $('#admins').prepend(can.view( 'admin_form_EJS', { item: new Admin } ))
+    $('#admin_user_virtual_domain_ids').chosen
+      allow_single_deselect: true
+    $('.add-admin').toggle()
+
+  "#new_admin_user submit": (el, ev) ->
+    ev.preventDefault()
+    self = this
+    li = el.parents('li')
+    values = el.formParams()
+    item = new Admin(values["admin_user"])
+    if item.errors() # validation error
+      item.alert()
+      return
+    if li.hasClass('empty')
+      Admin.create(values, (json) ->
+        # callback function after create
+        if json["errors"]
+          li.find('.item').append(
+            can.view( 'errors_EJS', { errors: json["errors"] } )
+          )
+        else
+          # post-create hook
+          li.removeClass('empty').attr('id', 'admin_'+json.id)
+          # show links to edit and remove with right id
+          li.find('.item').html(
+            can.view( 'admin_item_EJS', { item: item } )
+          ).find('.btn-group a').attr('href', (i, v) ->
+            return unescape(v).replace(/{id}/g, json.id)
+          )
+          self.model.unshift(item)
+          $('.add-admin').toggle()
+      )
+    else
+      item.attr('id', li.attr('id').replace('admin_',''))
+      item.save (item) ->
+        # callback function after update
+        li.find('.item').html(
+          can.view( 'admin_item_EJS', { item: item } )
+        )
+
+
+
+
+
+  ".delete click": (el, ev) ->
+    ev.preventDefault()
+    if not confirm('Are You sure?')
+      return false
+    li = el.parents('li')
+    id = li.attr('id').replace('admin_','')
+    item = @model.with_id(parseInt(id))
+    @model.splice(@model.indexOf(item), 1)
+    item.destroy()
+    li.remove()
+    return false
+
+  ".manage click": (el, ev) ->
+    ev.preventDefault()
+    li = el.parents('li')
+    txt = el.text()
+    el.text(el.data('inverse'))
+    el.data('inverse', txt)
+    if el.hasClass('label-info')
+      el.removeClass('label-info')
+    else
+      el.addClass('label-info')
+      li.find('.item-content:last').remove()
+      return false
+    id = li.attr('id').replace('admin_','')
+    item = @model.with_id(parseInt(id))
+    li.find('.item').append(
+      can.view( 'manage_area_EJS', { item: item } )
+    )
+    if item['domains']
+      $('#admin_user_virtual_domain_ids').val(item.domain_ids())
+    $('#admin_user_virtual_domain_ids').chosen
+      allow_single_deselect: true
+    return false
+
+})

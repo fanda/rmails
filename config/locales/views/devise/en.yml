@@ -1,0 +1,13 @@
+cz:
+  devise:
+    sessions:
+      new:
+        title: Sign In
+        sign_in: Ok
+    shared:
+      links:
+        sign_in: Sign in
+        sign_up: Sign up
+        password: Forgot your password?
+        unlock: "Didn't receive unlock instructions?"
+        omniauth: Sign in with

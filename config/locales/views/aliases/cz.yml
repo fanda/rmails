@@ -1,0 +1,17 @@
+cz:
+  aliases:
+    index:
+      title: Přesměrování
+      title_new: Vytvořit nové přesměrování
+      title_edit: Upravit přesměrování
+      edit: Upravit
+      delete: Odstranit
+      create: Přidat přesměrování
+      confirm: Opravdu chcete odstranit toto přesměrování?
+    form:
+      source: Co
+      destination: Kam
+      create: Vytvořit
+      reset: Storno
+      source_hint: Jméno schránky nebo *
+      dest_hint: Celé e-mailové adresy, každá na vlastní řádek

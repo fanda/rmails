@@ -1,0 +1,21 @@
+= simple_form_for admin, :url => admin_users_path, :method => :post, :html => { :class => 'form-horizontal' } do |f|
+
+  .span4.edit
+    %h4=t '.infos'
+    = f.input :name, :label => t('.name')
+    = f.input :email, :label => t('.email')
+    = f.input :password
+    = f.input :password_confirmation
+
+    -#= f.input :super, :as => :check_box, :label => t('.super')
+
+  .span5.domains
+    %h4=t '.domains'
+    = f.collection_select :virtual_domain_ids, VirtualDomain.all,
+                          :id, :name,
+                          {},
+                          {:multiple => true}
+  .out
+
+    = f.button :button, t('.create'), :type => 'submit', :class => 'btn-primary'
+    = f.button :button, t('.reset'), :type => 'reset'

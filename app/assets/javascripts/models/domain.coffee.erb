@@ -1,25 +1,39 @@
-window.Link = can.Model({
-  findAll : 'GET <%= Rails.application.routes.url_helpers.links_path %>'
+window.Domain = can.Model({
+  findAll : 'GET <%= Rails.application.routes.url_helpers.domains_path %>'
 
-  findOne : ('GET ' + unescape('<%= Rails.application.routes.url_helpers.link_path('{id}') %>'))
+  findOne : ('GET ' + unescape('<%= Rails.application.routes.url_helpers.domain_path('{id}') %>'))
 
-  create  : (attrs, link) ->
-    url = '<%= Rails.application.routes.url_helpers.links_path %>'
-    return $.post(url, attrs, (id) ->
-        link.attr('id', id)
-      , "json")
+  create  : (attrs, callback) ->
+    url = '<%= Rails.application.routes.url_helpers.domains_path %>'
+    return $.post(url, attrs, callback, "json")
 
-  update  : (attrs, link ) ->
-    url = unescape('<%= Rails.application.routes.url_helpers.link_path('{id}') %>').replace('{id}', link.id)
+  update  : (attrs, domain ) ->
+    url = unescape('<%= Rails.application.routes.url_helpers.domain_path('{id}') %>').replace('{id}', domain.id)
     return $.post(url, attrs, null, "json")
 
-  destroy : ('DELETE ' + unescape('<%= Rails.application.routes.url_helpers.link_path('{id}') %>'))
+  destroy : ('DELETE ' + unescape('<%= Rails.application.routes.url_helpers.domain_path('{id}') %>'))
 
+
+  attributes: {
+    virtual_users: 'Models.User.models',
+    virtual_aliases: 'Models.Alias.models'
+  },
 
   init: () ->
-    @validatePresenceOf ['title', 'url']
+    @validatePresenceOf ['name']
+    #@validateFormatOf   ['name'], /\A(?:[-a-z0-9]+\.)+[a-z]{2,}\Z/i
 
 }, {})
 
-window.Link.prototype.alert = () ->
-  alert('<%= I18n.t('alert.link') %>')
+window.Domain.List = can.Model.List({
+  with_id: (id) ->
+    the_one = null
+    @each (domain) ->
+      if (domain.id == id)
+        the_one = domain
+        return domain
+    return the_one
+})
+
+window.Domain.prototype.alert = () ->
+  alert('<%= I18n.t('alert.domain') %>')

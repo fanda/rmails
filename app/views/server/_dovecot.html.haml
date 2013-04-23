@@ -1,0 +1,27 @@
+= field_set_tag t('server.storage') do
+  = property_input form, @properties['storage_size']
+  = property_input form, @properties['storage_trash']
+  = property_input form, @properties['storage_spam']
+  = property_input form, @properties['mail_cache_min_mail_count']
+
+= field_set_tag t('server.msg_rejection') do
+  = property_input form, @properties['quota_full_tempfail']
+  = property_input form, @properties['rejection_subject']
+  = property_input form, @properties['rejection_reason']
+
+= field_set_tag t('server.auth') do
+  = property_input form, @properties['auth_username_chars']
+  = property_input form, @properties['disable_plaintext_auth']
+  = property_input form, @properties['auth_worker_max_count']
+  = property_input form, @properties['auth_verbose']
+
+= field_set_tag t('server.pop') do
+  = property_input form, @properties['pop3_login_listener_port']
+  = property_input form, @properties['pop3s_login__listener__port']
+  = property_input form, @properties['pop3__process_limit']
+
+= field_set_tag t('server.imap') do
+  = property_input form, @properties['imap_login__listener__port']
+  = property_input form, @properties['imaps_login__listener__port']
+  = property_input form, @properties['imap__process_limit']
+

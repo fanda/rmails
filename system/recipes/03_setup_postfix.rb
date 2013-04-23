@@ -7,6 +7,7 @@ elsif tagged?('fedora | centos')
 end
 
 adapter = lookup('postfix#database#adapter')
+shell_manager.mkdir "#{etc_postfix}/#{adapter}"
 
 
 #
@@ -25,17 +26,15 @@ db_query_files = %w(
                     virtual_mailbox_maps.cf
                     virtual_alias_maps.cf
                     email2email.cf            )
-
 db_query_files.each do |file|
   render(
     :file   => "#{dist}postfix/#{file}.erb",
     :to     => "#{etc_postfix}/#{adapter}/#{file}",
-    :mode   => 0555,
+    :mode   => 0660,
     :locals => locals
   )
 end
-shell_manager.chown('root', 'postfix', "#{etc_postfix}/#{adapter}/*")
-#XXX 0555 ==? shell_manager.chmod('o=', "#{}/.conf")
+shell_manager.chown_R('root', 'postfix', "#{etc_postfix}/#{adapter}")
 
 #
 # Set master.cf
@@ -47,7 +46,7 @@ locals = {
 render(
     :file   => "#{dist}postfix/master.cf.erb",
     :to     => "#{etc_postfix}/master.cf",
-    :mode   => 0555,
+    :mode   => 0660,
     :locals => locals
 )
 
@@ -56,28 +55,35 @@ render(
 # Set main.cf
 #
 locals = {
-    :root_path    => etc_postfix
+    :root_path    => etc_postfix,
     :dovecot      => dovecot_path,
     :adapter      => adapter,
-    :mail_name    => mail_name,
-    :myhostname   => myhostname,
-    :mydomain     => mydomain,
-    :smtpd_banner => smtpd_banner,
-    :message_size_limit => message_size_limit
+    :mail_name    => lookup("postfix#mail_name"),
+    :myhostname   => lookup("postfix#myhostname"),
+    :mydomain     => lookup("postfix#mydomain"),
+    :smtpd_banner => lookup("postfix#smtpd_banner"),
+    :message_size_limit => lookup("postfix#message_size_limit")
 }
 render(
     :file   => "#{dist}postfix/main.cf.erb",
     :to     => "#{etc_postfix}/main.cf",
-    :mode   => 0555,
+    :mode   => 0660,
     :locals => locals
 )
 
 
+#openssl s_client -connect localhost:25 -starttls smtp -CApath /etc/ssl/certs
+#unless File.file?('/etc/ssl/certs/smtpd.pem')
+  generate_smtpd_key lookup("postfix#myhostname")
+#end
+
+
+=begin
 edit :file => "#{etc_postfix}/main.cf" do
   uncomment('reject_rbl_client bl.spamcop.net')
   uncomment('reject_rbl_client zen.spamhaus.org')
 end
-
+=end
 
 #
 # Set DKIM
@@ -94,6 +100,10 @@ edit :file => "/etc/default/opendkim" do
   append 'SOCKET="inet:8891@localhost"'
 end
 
+
+mkdir "/etc/opendkim"
+mkdir_p "/etc/ssl/dkim"
+
 edit :file => "/etc/opendkim.conf" do
   append "KeyTable \t/etc/opendkim/KeyTable"
   append "SigningTable \t/etc/opendkim/SigningTable"
@@ -101,28 +111,14 @@ edit :file => "/etc/opendkim.conf" do
   append "InternalHosts \t/etc/opendkim/TrustedHosts"
 end
 
-mkdir("/etc/opendkim")
-mkdir_p("/var/keys/dkim")
-
 # generate "default" key
-generate_dkim_key_for_domain lookup('postfix#mydomain'), 'default'
+key_table, signing_table = generate_dkim_key lookup('postfix#mydomain'), 'default'
 
-edit :file => "/etc/opendkim/SigningTable" do
-
-end
-edit :file => "/etc/opendkim/TrustedHosts" do
-  append("127.0.0.1\nlocalhost")
-end
+render :to => '/etc/opendkim/KeyTable',     :text => key_table
+render :to => "/etc/opendkim/SigningTable", :text => signing_table
+render :to => "/etc/opendkim/TrustedHosts", :text => "127.0.0.1\nlocalhost"
 
 
-def generate_dkim_key_for_domain(domain, keyname=domain)
-  sh("opendkim-genkey -r -d #{keyname} -D /var/keys/dkim")
-  chown 'opendkim', 'opendkim', "/var/keys/dkim/#{keyname}.private"
-  edit :file => '/etc/opendkim/KeyTable' do
-    append("default._domainkey.#{keyname} #{domain}:default:/var/keys/dkim/#{keyname}.private")
-  end
-  edit :file => "/etc/opendkim/SigningTable" do
-    append("#{domain} default._domainkey.#{keyname}")
-  end
-end
+service_manager.start("postfix")
+service_manager.start("opendkim")
 

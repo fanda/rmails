@@ -1,0 +1,9 @@
+= field_set_tag t('server.dspam_preferences') do
+  = property_input form, @properties['enableBNR']
+  = property_input form, @properties['enableWhitelist']
+  = property_input form, @properties['whitelistThreshold']
+  = property_input form, @properties['statisticalSedation']
+  = property_input form, @properties['spamSubject']
+  = property_input form, @properties['spamAction']
+  = property_input form, @properties['signatureLocation']
+

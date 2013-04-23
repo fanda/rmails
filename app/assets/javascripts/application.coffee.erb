@@ -1,14 +1,15 @@
 #= require ./lib/jquery
 #= require jquery_ujs
-#= require cocoon
+#= require chosen-jquery
 #= require ./canjs/can.jquery
+#= require ./canjs/can.observe.validations
+#= require ./canjs/can.observe.setter
 #= require ./lib/jquery_formparams
 #= require ./lib/jquery_input_hint
 #= require ./lib/jquery_paginate
 #= require ./lib/json2
 #= require ./lib/utils
 #= require ./lib/facebox
-#= require ./bootstrap_ini
 #= require_tree ./models
 #= require_tree ./controls
 #= require_self
@@ -19,7 +20,8 @@ $(document).ready ->
     close_image   : 'closelabel.gif'
   })
 
-
+  #$(window).scroll(sticky)
+  #$(window).resize(sticky)
   return
 
 

@@ -1,0 +1,23 @@
+cz:
+  server:
+    key:
+      disable_plaintext_auth: Zakázat autentizaci bez šifrování
+      auth_username_chars: Povolené znaky v uživatelově jméně
+      auth_worker_max_count: Maximální počet přihlašovacích procesů
+      auth_verbose: Podrobnější logování autentizace
+      mail_cache_min_mail_count: Min. počet e-mailů před aktualizací cache
+      imap_login__listener__port: IMAP port
+      imaps_login__listener__port: IMAPs port
+      pop3_login_listener_port: POP3 port
+      pop3s_login__listener__port: POP3s port
+      imap__process_limit: Max. počet připojených IMAP klientů
+      pop3__process_limit: Max. počet připojených POP3 klientů
+      quota_full_tempfail: Způsob upozornění na plnou schránku
+      rejection_subject: Předmět odmítnutí
+      rejection_reason: Důvod odmítnutí
+      storage_size: Velikost schránky
+      storage_trash: Velikost koše
+      storage_spam: Velikost složky SPAM
+
+
+

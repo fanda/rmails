@@ -35,12 +35,12 @@ shared_buffers = 32MB			# min 128kB
 #max_files_per_process = 1000		# min 25
 					# (change requires restart)
 #shared_preload_libraries = ''		# (change requires restart)
-
+ssl=false
 
 # - Locale and Formatting -
 
-datestyle = 'iso, mdy'
-
+#datestyle = 'iso, mdy'
+data_directory = '/var/lib/postgresql/9.1/main'
 # These settings are initialized by initdb, but they can be changed.
 lc_messages = 'en_US.UTF-8'			# locale for system error message
 					# strings
@@ -51,4 +51,4 @@ lc_time = 'en_US.UTF-8'				# locale for time formatting
 # default configuration for text search
 default_text_search_config = 'pg_catalog.english'
 
-
+shared_buffers = 300kB

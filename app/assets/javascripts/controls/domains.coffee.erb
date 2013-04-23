@@ -1,0 +1,115 @@
+window.Domains = can.Control({
+
+  init: (el, opt) ->
+    @opt = opt
+    @model = Domain.models JSON.parse($('#domains_JSON').text())
+    return
+
+  "form reset": (el, ev) ->
+    li = el.parents('li')
+    if li.hasClass('empty')
+      $('#domains .empty').remove()
+      $('.add-domain').toggle()
+    else if li.hasClass('inedit')
+      id = li.attr('id').replace('domain_','')
+      item = @model.with_id(parseInt(id))
+      li.find('.item').html(
+        can.view( 'domain_item_EJS', { item: item } )
+      )
+
+  ".add-domain click": (el, ev) ->
+    ev.preventDefault()
+    $('#domains .empty').remove()
+    $('#domains').prepend(can.view( 'domain_form_EJS', { item: new Domain } ))
+    $('.add-domain').toggle()
+
+  ".rm-domain click": (el, ev) ->
+    ev.preventDefault()
+    $('#domains .empty').remove()
+    $('.add-domain').toggle()
+
+  "#new_virtual_domain submit": (el, ev) ->
+    ev.preventDefault()
+    self = this
+    values = el.formParams()
+    item = new Domain(values["virtual_domain"])
+    if item.errors() # validation error
+      item.alert()
+      return
+    li = $('#domains .empty')
+    Domain.create(values, (json) ->
+      # callback function after creation
+      if json["errors"]
+        li.find('.item').append(
+          can.view( 'errors_EJS', { errors: json["errors"] } )
+        )
+      else
+        # post-creation hook
+        item.attr('id', json.id)
+        li.removeClass('empty').attr('id', 'domain_'+json.id)
+        # show links to edit and remove with right id
+        li.find('.item').html(
+          can.view( 'domain_item_EJS', { item: item } )
+        ).find('.btn-group a').attr('href', (i, v) ->
+          return unescape(v).replace(/{id}/g, json.id)
+        )
+        self.model.unshift(item)
+        $('.add-domain').toggle()
+    )
+
+
+
+  ".edit click": (el, ev) ->
+    ev.preventDefault()
+    li = el.parents('li')
+    id = li.attr('id').replace('domain_','')
+    item = @model.with_id(parseInt(id))
+    li.find('.item').html(can.view( 'domain_edit_EJS', { item: item } ))
+    li.addClass('inedit')
+    return false
+
+  ".delete click": (el, ev) ->
+    ev.preventDefault()
+    if not confirm('Are You sure?')
+      return false
+    li = el.parents('li')
+    id = li.attr('id').replace('domain_','')
+    item = @model.with_id(parseInt(id))
+    @model.splice(@model.indexOf(item), 1)
+    item.destroy()
+    li.remove()
+    return false
+
+  ".manage click": (el, ev) ->
+    ev.preventDefault()
+    li = el.parents('li')
+    txt = el.text()
+    el.text(el.data('inverse'))
+    el.data('inverse', txt)
+    if el.hasClass('label-info')
+      el.removeClass('label-info')
+    else
+      el.addClass('label-info')
+      li.find('.item-content:last').remove()
+      return false
+
+    id = li.attr('id').replace('domain_','')
+    item = @model.with_id(parseInt(id))
+    if li.find('.item .item-content:last').hasClass('out')
+      return false
+    li.find('.item').append(
+      can.view( 'manage_area_EJS' )
+    )
+    users   = new Users(li.find('.item .users'), {
+      items: item["virtual_users"]
+      domain_id: id
+      domain_name: item.name
+    })
+    aliases = new Aliases(li.find('.item .aliases'), {
+      items: item["virtual_aliases"]
+      domain_id: id
+      domain_name: item.name
+    })
+    return false
+
+})

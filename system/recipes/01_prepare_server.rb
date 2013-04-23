@@ -1,49 +1,84 @@
 
-puts tagged?("debian".bytes.to_a)
-
 #
 # Install system packages
 #
-
-system_packages = %w( perl awstats opendkim dspam libdspam7-drv-pgsql )
+puts 'xx Install tools'
+package_manager.install %w( ntp perl awstats opendkim )
 
 # they may be platform-specific
 if tagged?("ubuntu|debian")
-  system_packages += %w( build-essential libpq-dev nginx postfix postgresql )
+  puts 'xx Install apt specific'
+  package_manager.install %w( build-essential libpq-dev )
+
+  postgres_packages = %w( postgresql )
+
+  dovecot_packages = %w( dovecot-core dovecot-pgsql dovecot-pop3d dovecot-imapd dovecot-sieve dovecot-managesieved dovecot-lmtpd )
+  dspam_packages = %w( dspam libdspam7-drv-pgsql )
+  amavis_packages = %w( amavisd-new spamassassin )
 
   if tagged?("ubuntu")
-    system_packages += %w( dovecot-common )
-  else
-    system_packages += %w( dovecot )
+    package_manager.install postgres_packages + dovecot_packages
+    package_manager.install dspam_packages + amavis_packages
+
+  else # this is debian
+
+    package_manager.install postgres_packages + amavis_packages
+    backports_packages = dovecot_packages + dspam_packages
+
+    # we need to use backports - squeeze is actually stable branch
+    backports_source = "deb http://backports.debian.org/debian-backports squeeze-backports main"
+    edit(:file => "/etc/apt/sources.list") do
+      if contains? backports_source
+        uncomment backports_source
+      else
+        append backports_source
+      end
+    end
+    # update repo system
+    puts "Getting Debian backports packages information..."
+    #XXX shell_manager.sh "apt-get update > /dev/null 2>&1"
+
+    package_manager.install backports_packages, :backports => 'squeeze-backports'
   end
 
+
 elsif tagged?("fedora | centos")
-  system_packages += %w( gcc ruby-devel nginx postfix postgresql-server dovecot )
+  package_manager.install %w( gcc ruby-devel nginx postfix postgresql-server dovecot )
 
 else # fail if running on another platform
   raise NotImplementedError.new("This platform has not been supported yet")
 
 end
 
-package_manager.install system_packages
+package_manager.install %w( postfix postfix-pgsql nginx )
 
 
-#
-# Install Rails and supporting libraries with RubyGems
-#
+#edit :file => '~/.gemrc' do
+#  lines = "install: --no-rdoc --no-ri\nupdate:  --no-rdoc --no-ri"
+#  append lines unless contains? lines
+#end
 
-gems = %w( bundler pg automateit thin )
+gems = %w( activerecord-postgresql-adapter pg paper_trail haml haml-rails jquery-rails chosen-rails simple_form )
 
-package_manager.install gems, {:with => :gem, :docs => false}
+begin
+#  package_manager.install(gems, :with => :gem, :docs => false)
+  puts "!! Gems installed"
+rescue
+end
+render :file => "#{dist}rmails/Gemfile.2", :to => "#{rails_root}/Gemfile"
 
-#
-# Set system to do not download rubygems documentation
-#
+shell_manager.sh 'export PATH=/var/lib/gems/1.8/bin/:${PATH}'
 
-shell_manager.sh 'echo -e "install: --no-rdoc --no-ri\nupdate:  --no-rdoc --no-ri" >> ~/.gemrc'
+account_manager.add_group('rmails')
 
-#
-# Bundle other application dependencies
-#
+render(
+    :file   => "#{dist}sudoers",
+    :to     => "/etc/sudoers",
+    :mode   => 0440, :backup => false
+)
 
-shell_manager.sh 'bundle install'
+# application private key
+#passwords << server_key('/etc/rmails.key')
+# remember password
+
+#puts passwords.inspect

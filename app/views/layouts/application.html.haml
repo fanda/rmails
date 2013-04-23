@@ -5,39 +5,25 @@
     = stylesheet_link_tag    "application", :media => "all"
     = javascript_include_tag "application"
     = csrf_meta_tags
-  %body
+  %body#rmails
     %header
-      %h1= link_to 'RMails', root_url
-    %section#search
-      = form_tag search_path do
-        = text_field_tag :q
-        = button_tag 'Search'
-    %nav.navbar.navbar-inverse
-      %ul.nav.btn-group
-        %li.btn.btn-inverse
-          %a
-            %i.icon-user
-            %span.text
-              Profile
-        %li.btn.btn-inverse
-          %a
-            %i.icon-share-alt
-            %span.text
-              Logout
+      %h1.left
+        = link_to 'RMails', root_url
+        = yield :title
+      - if current_admin_user
+        %span.right
+          = t('loggedin')
+          = current_admin_user.email
+          %br
+          = link_to t('logout'), destroy_admin_user_session_path, :method => :delete
 
-    %sidebar
-      %ul
-        %li.active
-          %a
-            %i.icon-home
-            Domů
-        %li
-          %a
-            %i.icon-home
-            Ven
-    %article
-      #header
-      #breadcrumb
-      #content.container-fluid
-
-    = yield
+    .body-wrapper.out
+      .left-column
+        .left-column-content
+          %ul.navigation
+            = render :partial => '/layouts/nav'
+      .center-column
+        #content.center-column-content
+          = yield
+      .right-column
+    = yield :script

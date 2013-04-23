@@ -1,63 +1,297 @@
-protocols = <%= protocols %> sieve
+postmaster_address = <%= begin;postmaster ;end; %>
+protocols = <%= protocols %> lmtp sieve
 
-protocol imap {
-  mail_plugins = autocreate quota imap_quota
+mail_plugins = quota autocreate
+
+##
+## Authentication processes
+##
+
+disable_plaintext_auth = <%= begin;disable_plaintext_auth;rescue;'no';end; %>
+
+
+# XXX
+# Authentication cache size (e.g. 10M). 0 means it's disabled. Note that
+# bsdauth, PAM and vpopmail require cache_key to be set for caching to be used.
+#auth_cache_size = 0
+#auth_cache_ttl = 1 hour
+# TTL for negative hits (user not found, password mismatch).
+# 0 disables caching them completely.
+#auth_cache_negative_ttl = 1 hour
+# XXX
+
+#auth_realms =
+#auth_default_realm =
+auth_username_chars = <%= begin;auth_username_chars ;rescue;'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890.-_@' ;end; %>
+#auth_username_translation =
+auth_username_format = %Lu
+auth_worker_max_count = <%= begin;auth_worker_max_count ;rescue;'30' ;end; %>
+
+# Require a valid SSL client certificate or the authentication fails.
+#auth_ssl_require_client_cert = no
+# XXX
+auth_mechanisms = <%= begin;auth_mechanisms ;rescue;'plain' ;end; %>
+
+
+##
+## Director-specific settings.
+##
+
+#service imap-login {
+#  executable = imap-login director
+#}
+#service pop3-login {
+#  executable = pop3-login director
+#}
+
+
+
+## XXX
+## Log destination.
+##
+
+# Log file to use for error messages. "syslog" logs to syslog,
+# /dev/stderr logs to stderr.
+log_path = /var/log/dovecot.log
+
+# Log file to use for informational messages. Defaults to log_path.
+info_log_path = /var/log/dovecot.info
+# Log file to use for debug messages. Defaults to info_log_path.
+debug_log_path = /var/log/dovecot.debug
+
+##
+## Logging verbosity and debugging.
+##
+
+# Log unsuccessful authentication attempts and the reasons why they failed.
+auth_verbose = <%= begin;auth_verbose ;rescue;'no' ;end; %>
+
+# Even more verbose logging for debugging purposes. Shows for example SQL
+# queries. XXX XXX XXX XXX XXX XXX XXX XXX
+auth_debug = yes
+auth_debug_passwords=yes
+mail_debug = yes
+verbose_ssl = yes
+auth_verbose_passwords=plain
+
+login_log_format_elements = user=|%u| method=%m rip=%r lip=%l mpid=%e %c
+
+##
+## Mailbox locations and namespaces
+##
+
+mail_location = maildir:/var/mail/%d/%n/Maildir:INDEX=/var/mail/%d/%n/indexes
+
+namespace inbox {
+  # Namespace type: private, shared or public
+  type = private
+  separator = .
+
+  #prefix =
+  #location =
+  inbox = yes
+  #hidden = no
+  #list = yes
+  #subscriptions = yes
 }
 
-protocol pop3 {
-  mail_plugins = autocreate quota
-  listen = *:110
-  ssl_listen = *:995
+## TODO
+# System user and group used to access mails. If you use multiple, userdb
+# can override these by returning uid or gid fields. You can use either numbers
+# or names. <doc/wiki/UserIds.txt>
+mail_uid = 8
+mail_gid = 12
+
+first_valid_uid = 8
+last_valid_uid = 8
+
+first_valid_gid = 12
+last_valid_gid = 12
+
+mail_full_filesystem_access = no
+
+##
+## Mail processes
+##
+
+auth_socket_path = /var/run/dovecot/auth-userdb
+mail_cache_min_mail_count = <%= begin;mail_cache_min_mail_count ;rescue;'0' ;end; %>
+maildir_very_dirty_syncs = yes
+#default_vsz_limit = 256M
+default_internal_user = mail
+
+service imap-login {
+  inet_listener imap {
+    # imap_login__listener__port !!DO NOT REMOVE THIS LINE!!
+    port = <%= begin; imap_login__listener__port ;rescue;'143' ;end; %>
+  }
+  inet_listener imaps {
+    # imaps_login__listener__port !!DO NOT REMOVE THIS LINE!!
+    port = <%= begin; imaps_login__listener__port ;rescue;'993' ;end; %>
+    #ssl = yes
+  }
+  vsz_limit = $default_vsz_limit
 }
 
+service pop3-login {
+  inet_listener pop3 {
+    # pop3_login__listener__port !!DO NOT REMOVE THIS LINE!!
+    port = <%= begin; pop3_login__listener__port ;rescue;'110' ;end; %>
+  }
+  inet_listener pop3s {
+    # pop3s_login__listener__port !!DO NOT REMOVE THIS LINE!!
+    port = <%= begin; pop3s_login__listener__port ;rescue;'995' ;end; %>
+    ssl = yes
+  }
+}
+
+service lmtp {
+  unix_listener /var/spool/postfix/private/dovecot-lmtp {
+    mode = 0600
+    user = postfix
+    group = postfix
+  }
+}
+
+service imap {
+  #vsz_limit = $default_vsz_limit
+  # imap__process_limit  !!DO NOT REMOVE THIS LINE!!
+  process_limit = <%= begin; imap__process_limit ;rescue;'1024' ;end; %>
+}
+
+service pop3 {
+  # pop3__process_limit   !!DO NOT REMOVE THIS LINE!!
+  process_limit = <%= begin; pop3__process_limit ;rescue;'1024' ;end; %>
+}
+
+service auth {
+  unix_listener auth-userdb {
+    mode = 0600
+    user = mail
+    group = mail
+  }
+
+  # Postfix smtp-auth
+  unix_listener /var/spool/postfix/private/auth {
+    mode = 0666
+    user = postfix
+    group = postfix
+  }
+}
+
+service auth-worker {
+  user = $default_internal_user
+}
+
+service dict {
+  # If dict proxy is used, mail processes should have access to its socket.
+  # For example: mode=0660, group=vmail and global mail_access_groups=vmail
+  unix_listener dict {
+    #mode = 0600
+    #user =
+    #group =
+  }
+}
+
+##
+## ManageSieve specific settings
+##
+
+service managesieve-login {
+  inet_listener sieve {
+    port = 4190
+  }
+}
+
+service managesieve {
+  #process_count = 1024
+}
+
+##
+## SSL settings
+##
+
+# SSL/TLS support: yes, no, required. <doc/wiki/SSL.txt>
+ssl = no
+
+ssl_cert = </etc/ssl/certs/dovecot.pem
+ssl_key = </etc/ssl/private/dovecot.pem
+
+
+##
+## LDA specific settings (also used by LMTP)
+##
+
+quota_full_tempfail = <%= begin;quota_full_tempfail;rescue;'no' ;end; %>
+
+# Subject: header to use for rejection mails. You can use the same variables
+# as for rejection_reason below.
+rejection_subject = <%= begin;rejection_subject;rescue;'Rejected: %s' ;end; %>
+# Human readable error message for rejection mails. You can use variables:
+#  %n = CRLF, %r = reason, %s = original subject, %t = recipient
+rejection_reason = <%= begin;rejection_reason;rescue;'Your message to %t was automatically rejected:%n%r' ;end; %>
+
+#recipient_delimiter = +
+lda_mailbox_autocreate = no
+lda_mailbox_autosubscribe = no
+
+
+# Enable director for LMTP proxying:
+protocol lmtp {
+  auth_socket_path = director-userdb
+  mail_plugins = $mail_plugins mail_log sieve
+}
 protocol lda {
-  auth_socket_path = /var/run/dovecot/auth-master
-  postmaster_address = <%= postmaster %>
-  mail_plugins = sieve quota
-  log_path =
+  mail_plugins = $mail_plugins
+}
+protocol imap {
+  mail_plugins = $mail_plugins imap_quota
+}
+protocol pop3 {
+  mail_plugins = $mail_plugins
 }
 
-ssl = yes
-ssl_cert_file = /etc/ssl/dovecot/cert.pem
-ssl_key_file = /etc/ssl/dovecot/key.pem
-#ssl_parameters_regenerate = 168
+##
+## Quota limits
+##
 
-quota = maildir:User quota
-quota_rule = *:storage=<%= storage[:size] %>
-quota_rule2 = Trash:storage=<%= storage[:trash] %>
-quota_rule = Spam:storage=<%= storage[:spam] %>
-
-mail_location = maildir:/var/vmail/%d/%n/Maildir
-
-namespace private {
-     separator = .
-     inbox = yes
+plugin {
+  quota = maildir:User quota
+  quota_rule = *:storage=<%= begin;storage[:size] ;end; %>
+  quota_rule2 = Trash:storage=<%= begin;storage[:trash] ;end; %>
+  quota_rule3 = Spam:storage=<%= begin;storage[:spam] ;end; %>
 }
 
-auth default {
-  mechanisms = plain
-  passdb sql {
-    args = /etc/dovecot/dovecot-sql.conf
-  }
-  userdb sql {
-    args = /etc/dovecot/dovecot-sql.conf
-  }
-  !include_try /etc/dovecot/auth.d/*.auth
+plugin {
+  sieve = ~/.sieve
+  sieve_dir = ~/sieve
 }
 
-auth external {
-  socket connect {
-    master {
-      path = /var/run/dovecot/auth-master
-      mode = 0600
-      user = vmail
-    }
-    client {
-      path = /var/spool/postfix/private/auth
-      mode = 0600
-      user = postfix
-      group = postfix
-    }
-  }
+plugin {
+  autocreate = INBOX.Trash
+  autocreate2 = INBOX.Drafts
+  autocreate3 = INBOX.Sent
+  autocreate4 = INBOX.Spam
+  autosubscribe = INBOX.Trash
+  autosubscribe2 = INBOX.Drafts
+  autosubscribe3 = INBOX.Sent
+  autosubscribe4 = INBOX.Spam
+  mail_log_events = delete mailbox_delete
+  mail_log_fields = uid box msgid size flags vsize from subject
 }
 
+
+
+# Authentication for SQL users. Included from auth.conf.
+#
+# <doc/wiki/AuthDatabase.SQL.txt>
+
+passdb {
+  driver = sql
+  args = /etc/dovecot/dovecot-sql.conf.ext
+}
+
+userdb {
+  driver = sql
+  args = /etc/dovecot/dovecot-sql.conf.ext
+}

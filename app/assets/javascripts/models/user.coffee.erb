@@ -1,0 +1,29 @@
+window.User = can.Model({
+  findAll : 'GET <%= Rails.application.routes.url_helpers.domain_users_path('{domain_id}') %>'
+
+  findOne : ('GET ' + unescape('<%= Rails.application.routes.url_helpers.domain_user_path('{domain_id}', '{id}') %>'))
+
+  create  : (attrs, domain_id, callback) ->
+    url = unescape('<%= Rails.application.routes.url_helpers.domain_users_path("{domain_id}") %>').replace("{domain_id}", domain_id)
+    return $.post(url, attrs, callback, "json")
+
+  update  : (attrs, user, url ) ->
+    attrs["_method"] = "PUT"
+    return $.ajax({
+      url: url + '/' + user.id
+      type: 'POST'
+      data: attrs
+      dataType: 'json'
+      success: (json) ->
+        dbg(json)
+    })
+
+  destroy : ('DELETE ' + unescape('<%= Rails.application.routes.url_helpers.domain_user_path('{domain_id}', '{id}') %>'))
+
+  init: () ->
+    @validatePresenceOf ['email']
+
+}, {})
+
+window.User.prototype.alert = () ->
+  alert('<%= I18n.t('alert.user') %>')

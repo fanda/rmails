@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+#/ Usage: rmails --install
+#/            --install Install all compoments of a system
+# ** Tip: use #/ lines to define the --help usage message.
+$stderr.sync = true
+require 'optparse'
+
+if File.exists?(File.join(File.expand_path('../..', __FILE__), '.git'))
+  rmails_path = File.expand_path('../../lib', __FILE__)
+  $:.unshift(rmails_path)
+end
+puts rmails_path
+puts $:
+
+begin
+  require 'rmails/installer'
+rescue
+  require 'rubygems'
+  require 'rmails/installer'
+end
+
+# default options
+install = false
+
+# parse arguments
+file = __FILE__
+ARGV.options do |opts|
+  opts.on("--install")                 { |install| }
+  opts.on_tail("-h", "--help")         { exec "grep ^#/<'#{file}'|cut -c4-" }
+  opts.parse!
+end
+
+# do your thing
+warn "action:   #{install.inspect}"
+
+if install
+  # 1. 00_prepare_server
+  # 2. bundle install
+  # 3. 01_ ...
+  setup = Rmails::Installer.new
+  setup.run
+
+end

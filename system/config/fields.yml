@@ -10,25 +10,33 @@ postfix:
     host: 127.0.0.1
   message_size_limit: 15728640
   mail_name: Rmails
-  myhostname: rmails.com
+  myhostname: mail.rmails.com
   mydomain: rmails.com
   smtpd_banner: "$myhostname ESMTP $mail_name"
 dovecot:
-  system:
-    user: vmail
-    id: 5000
-    home: "/var/vmail"
-  protocols: imap imaps pop3 pop3s
+  protocols: imap pop3
   postmaster: fandisek@gmail.com
   storage_size: 400M
   trash_storage_size: 10%%
   spam_storage_size: 10%%
+  service:
+    imap_login:
+      listener_imap_port: 143
+      listener_imaps_port: 993
+    pop3_login:
+      listener_pop3_port: 110
+      listener_pop3s_port: 995
+    imap:
+      process_limit: 1024
+    pop3:
+      process_limit: 1024
 web:
-  prefer_www: false
+  domain_third_dot: ''
 database:
   host: localhost
-  port: 6711
+  port: 5432
   max_connections: 111
+
 dspam:
   delivery_port: 7711
   database:

@@ -1,0 +1,14 @@
+cz:
+  collection:
+    yes_no:
+      "yes": Ano
+      "no": Ne
+    on_off:
+      "on": Zapnuto
+      "off": Vypnuto
+    select_from_enum:
+      deliver: Doručit
+      tag: Označit
+      quarantine: Vložit do karantény
+      message: Do zprávy
+      headers: Do hlavičky

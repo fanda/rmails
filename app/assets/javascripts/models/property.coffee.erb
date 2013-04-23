@@ -1,0 +1,18 @@
+window.Property = can.Model({
+  findAll : 'GET <%= Rails.application.routes.url_helpers.server_path :format => :json %>'
+
+  findOne : ('GET ' + unescape('<%= Rails.application.routes.url_helpers.server_property_path('{id}') %>'))
+
+  update  : (id, new_value, callback) ->
+    url = unescape('<%= Rails.application.routes.url_helpers.server_property_path('{id}') %>').replace('{id}', id)
+    return $.post(url, {value: new_value}, callback, "json")
+
+  init: () ->
+    @validatePresenceOf ['key']
+    @validatePresenceOf ['value']
+
+}, {})
+
+
+window.Property.prototype.alert = () ->
+  alert('<%= I18n.t('alert.property') %>')

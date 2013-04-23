@@ -1,0 +1,63 @@
+protocols = <%= protocols %> sieve
+
+protocol imap {
+  mail_plugins = autocreate quota imap_quota
+}
+
+protocol pop3 {
+  mail_plugins = autocreate quota
+  listen = *:110
+  ssl_listen = *:995
+}
+
+protocol lda {
+  auth_socket_path = /var/run/dovecot/auth-master
+  postmaster_address = <%= postmaster %>
+  mail_plugins = sieve quota
+  log_path =
+}
+
+ssl = yes
+ssl_cert_file = /etc/ssl/certs/dovecot.pem
+ssl_key_file = /etc/ssl/private/dovecot.pem
+#ssl_parameters_regenerate = 168
+
+quota = maildir:User quota
+quota_rule = *:storage=<%= storage[:size] %>
+quota_rule2 = Trash:storage=<%= storage[:trash] %>
+quota_rule = Spam:storage=<%= storage[:spam] %>
+
+mail_location = maildir:/var/vmail/%d/%n/Maildir
+
+namespace private {
+     separator = .
+     inbox = yes
+}
+
+auth default {
+  mechanisms = plain
+  passdb sql {
+    args = /etc/dovecot/dovecot-sql.conf
+  }
+  userdb sql {
+    args = /etc/dovecot/dovecot-sql.conf
+  }
+  !include_try /etc/dovecot/auth.d/*.auth
+}
+
+auth external {
+  socket connect {
+    master {
+      path = /var/run/dovecot/auth-master
+      mode = 0600
+      user = vmail
+    }
+    client {
+      path = /var/spool/postfix/private/auth
+      mode = 0600
+      user = postfix
+      group = postfix
+    }
+  }
+}
+

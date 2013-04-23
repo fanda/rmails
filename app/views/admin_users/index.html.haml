@@ -1,0 +1,61 @@
+- content_for :title do
+  &rarr;
+  = t('.title')
+- content_for :script do
+  :javascript
+    $(document).ready(function() { new window.Admins('#content'); });
+
+= link_to admin_users_path, :class => 'add-admin btn btn-large btn-inverse' do
+  %span= t '.create'
+
+%ul#admins.list
+  - @admins.each do |admin|
+    %li{:id => "admin_#{admin.id}"}
+      .item
+        %i.icon-user.icon-large
+        .item-content
+          = link_to admin.name||admin.email, admin_user_path(admin), :class => 'item-label'
+          = link_to t(".manage"), admin_user_path(admin), :class => 'label label-info manage', :'data-inverse' => t(".nomanage")
+
+
+#admins_JSON.dn= @admins.to_json(:include => :domains)
+
+
+#EJS.dn
+  %script#admin_form_EJS{"type" => "text/ejs"}
+    %li.empty
+      .item
+        %i.icon-user.icon-large
+        .item-content
+          = t('.new_user')
+        .item-content.out.row-fluid
+          = render :partial => 'form', :locals => { :admin => admin_ejs_object }
+        .out
+
+  %script#admin_item_EJS{"type" => "text/ejs"}
+    %i.icon-user.icon-large
+    .item-content
+      %a{:href => "", :class => "item-label"}
+        :plain
+          <% if(item.name) { %>
+            <%= item.attr('name') %>
+          <% } else { %>
+            <%= item.attr('email') %>
+          <% } %>
+      = link_to t(".manage"), admin_user_path('{id}'), :class => 'label label-info manage', :'data-inverse' => t(".nomanage")
+
+  %script#errors_EJS{"type" => "text/ejs"}
+    .errors
+      %h6= t('.errors')
+      :plain
+        <% for (attr in errors) { %>
+          <% list (errors[attr], function(error) { %>
+            <p><%= error %></p>
+          <% }) %>
+        <% } %>
+
+  %script#manage_area_EJS{"type" => "text/ejs"}
+    .item-content.out.row-fluid
+      = render :partial => 'form',
+                 :locals => { :admin => admin_ejs_object }
+

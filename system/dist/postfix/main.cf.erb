@@ -1,13 +1,26 @@
+
+#
+# Network
+#
+myhostname = <%= myhostname %>
+mydomain = <%= mydomain %>
+# list of IPs I trust
+mynetworks = 192.168.0.0/16 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
+mydestination = $mydomain, $myhostname, localhost.$mydomain, localhost, <%= `hostname -f` %>
+#inet_interfaces = loopback-only
+#inet_protocols = ipv4
+disable_dns_lookups = no
+relayhost =
+
 #
 # System
 #
-mail_name = Rmails
-smtpd_banner = $myhostname ESMTP $mail_name
+mail_name = <%= mail_name %>
+smtpd_banner = <%= smtpd_banner %>
 biff = yes
 bounce_queue_lifetime = 5d
 maximal_queue_lifetime = 5d
 message_size_limit = <%= message_size_limit %>
-#transport_maps = <%= "#{adapter}:#{etc_postfix}/transport_maps.cf" %>
 
 # TOTO XXX: appending .domain is the MUA's job.
 append_dot_mydomain = no
@@ -25,42 +38,33 @@ unknown_local_recipient_reject_code = 450
 #
 # TLS parameters
 #
-smtp_use_tls = yes
 smtpd_use_tls = yes
-smtpd_tls_cert_file=/etc/ssl/postfix/smtpd.pem
-smtpd_tls_key_file=/etc/ssl/postfix/smtpd.key
+smtpd_tls_auth_only = yes
+smtpd_tls_cert_file=/etc/ssl/certs/smtpd.pem
+smtpd_tls_key_file=/etc/ssl/private/smtpd.pem
 #smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
 #smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 smtpd_tls_loglevel = 0
 smtpd_tls_received_header = yes
 smtpd_tls_session_cache_timeout = 3600s
 tls_random_source = dev:/dev/urandom
+#smtpd_tls_CAfile = /etc/ssl/certs/cacert.pem
 
-#
-# Network
-#
-myhostname = <%= myhostname %>
-mydomain = <%= mydomain %>
-# list of IPs I trust
-mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
-inet_interfaces = loopback-only
-disable_dns_lookups = no
-relayhost =
 
 #
 # Local
 #
 myorigin = /etc/mailname
 mydestination = $mydomain, localhost
-local_recipient_maps '$alias_maps
 alias_maps = hash:/etc/aliases
+local_recipient_maps = $alias_maps
 
 #
 # Mailbox
 #
 mailbox_command = <%= dovecot %>
 mailbox_size_limit = 0
-mail_spool_directory /var/spool/postfix
+mail_spool_directory = /var/spool/postfix
 recipient_delimiter = +
 
 
@@ -87,6 +91,12 @@ smtpd_sender_login_maps = <%= "#{adapter}:#{root_path}/#{adapter}/sender_login_m
 #
 # Restrictions
 #
+
+# Relay control: local or authenticated clients may specify any domain.
+smtpd_relay_restrictions = permit_mynetworks,
+	permit_sasl_authenticated,
+	reject_unauth_destination
+
 smtpd_recipient_restrictions = \
     permit_mynetworks           \
 #    reject_rbl_client dnsbl.sorbs.net \
@@ -96,7 +106,12 @@ smtpd_recipient_restrictions = \
     reject_unauth_destination
 
 
-smtpd_sender_restrictions = reject_sender_login_mismatch
+# Don't accept mail from domains that don't exist.
+smtpd_sender_restrictions = reject_unknown_sender_domain
+
+# Block clients that speak too early.
+#smtpd_data_restrictions = reject_unauth_pipelining
+
 
 #
 # Appends from AutomateIt

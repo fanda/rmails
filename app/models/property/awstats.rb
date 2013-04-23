@@ -1,8 +1,15 @@
 class Property::Awstats < Property
 
-  ME = AWSTATS
+  def self.service; AWSTATS ;end
 
-  default_scope where(:service => AWSTATS)
+  default_scope where(:service => self.service)
+
+
+protected
+
+  def self.etc_awstats
+    '/etc/awstats'
+  end
 
 
 end

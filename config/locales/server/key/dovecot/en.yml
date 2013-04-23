@@ -1,0 +1,20 @@
+en:
+  server:
+    key:
+      disable_plaintext_auth:
+      auth_username_chars:
+      auth_worker_max_count:
+      auth_verbose:
+      mail_cache_min_mail_count:
+      imap_login__listener__port:
+      imaps_login__listener__port:
+      pop3_login_listener_port:
+      pop3s_login__listener__port:
+      imap__process_limit:
+      pop3__process_limit:
+      quota_full_tempfail:
+      rejection_subject:
+      rejection_reason:
+      storage_size:
+      storage_trash:
+      storage_spam:

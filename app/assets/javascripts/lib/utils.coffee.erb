@@ -12,17 +12,6 @@ window.dbg2 = (node) ->
   escapedStr = str.replace( "<" , "&lt;" ).replace( ">" , "&gt;")
   $('body').append('<pre>'+escapedStr+'</pre>')
 
-
-window.currency_for = (el) ->
-  el.formatCurrency({
-    symbol: '<%= AppConfig.currency %>',
-		positiveFormat: '<%= I18n.t('number.currency.format.format').sub('u','s') %>'
-		negativeFormat: '(<%= I18n.t('number.currency.format.format').sub('u','s') %>)'
-		decimalSymbol: '<%= I18n.t('number.currency.format.delimiter') %>'
-		digitGroupSymbol: '<%= I18n.t('number.currency.format.separator') %>'
-		roundToDecimalPlace: 0
-  })
-
 $.fn.serializeObject = () ->
   o = {}
   a = this.serializeArray()
@@ -35,6 +24,23 @@ $.fn.serializeObject = () ->
       o[this.name] = this.value || ''
   )
   return o
+
+window.sticky = () ->
+    y = $(window).scrollTop()
+    if y > $('header').height()
+      height = $('nav.topbar').css({
+        'position': 'fixed'
+        'top': '0'
+        'width': $('#page').width()
+        'box-shadow': '0px 20px 20px -15px #CCC'
+      }).height()
+      $('#container').css({
+        'padding-top': height
+      })
+    else
+      $('nav.topbar').removeAttr('style')
+      $('#container').removeAttr('style')
+
 
 String.prototype.model = () ->
   return can.capitalize( this.replace( /[-_]([a-z])/ig, (z,b) ->

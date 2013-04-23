@@ -1,0 +1,11 @@
+.status
+  .alert.alert-info
+    %h4=t '.save_info'
+    %button.save.btn.btn-danger{:disabled => @properties_with_new_value.empty?}
+      =t '.submit_button'
+    .out
+  - if @properties_with_new_value.any?
+    .warning.alert.alert-block
+      %button.close{'data-dismiss'=>'alert'} &times;
+      %h4=t '.warning'
+      =t '.unsaved_warning'

@@ -1,0 +1,14 @@
+driver = pgsql
+connect = <%= "host=#{host} dbname=#{name} user=#{user} password=#{password}" %>
+
+default_pass_scheme = SHA512 # PLAIN-MD5
+
+user_query = SELECT \
+  '/var/mail/%d/%n/Maildir' AS userdb_home, \
+#  5000 AS uid, 5000 AS gid, \
+  CONCAT('*:storage=',quota_kb,':messages=',quota_messages) AS quota_rule \
+  FROM virtual_users WHERE email='%u';
+
+password_query = SELECT \
+  email as user, encrypted_password as password \
+  FROM virtual_users WHERE email='%u';

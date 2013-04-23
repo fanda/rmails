@@ -1,0 +1,33 @@
+use strict;
+
+$max_servers = 2;
+
+$mydomain = '<%= mydomain %>';
+
+@bypass_virus_checks_acl = qw( . );
+
+$sa_tag_level_deflt = -999;
+
+$sa_tag2_level_deflt = 5.0;
+
+$inet_socket_port = 3377;
+
+$forward_method='smtp:[127.0.0.1]:7733';
+$notify_method ='smtp:[127.0.0.1]:7733';
+
+
+$sa_spam_subject_tag = '***SPAM*** ';
+$sa_tag_level_deflt  = 2.0;  # add spam info headers if at, or above that level
+$sa_tag2_level_deflt = 6.31; # add 'spam detected' headers at that level
+$sa_kill_level_deflt = 6.31; # triggers spam evasive actions
+$sa_dsn_cutoff_level = 10;   # spam level beyond which a DSN is not sent
+
+$sa_mail_body_size_limit = 200*1024; # don't waste time on SA if mail is larger
+$sa_local_tests_only = 1;    # only tests which do not require internet access?
+
+$final_virus_destiny      = D_DISCARD;  # (data not lost, see virus quarantine)
+$final_banned_destiny     = D_BOUNCE;   # D_REJECT when front-end MTA
+$final_spam_destiny       = D_BOUNCE;
+$final_bad_header_destiny = D_PASS;     # False-positive prone (for spam)
+
+1;

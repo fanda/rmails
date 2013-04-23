@@ -1,0 +1,28 @@
+window.Alias = can.Model({
+  findAll : 'GET <%= Rails.application.routes.url_helpers.domain_aliases_path("{domain_id}") %>'
+
+  findOne : ('GET ' + unescape('<%= Rails.application.routes.url_helpers.domain_alias_path('{domain_id}', '{id}') %>'))
+
+  create  : (attrs, domain_id, callback) ->
+    url = unescape('<%= Rails.application.routes.url_helpers.domain_aliases_path("{domain_id}") %>').replace("{domain_id}", domain_id)
+    return $.post(url, attrs, callback, "json")
+
+  update  : (attrs, alias, url) ->
+    alias.attr(attrs['virtual_alias'])
+    attrs["_method"] = "PUT"
+    return $.ajax({
+      url: url + '/' + alias.id
+      type: 'POST'
+      data: attrs
+      dataType: 'json'
+    })
+
+  destroy : ('DELETE ' + unescape('<%= Rails.application.routes.url_helpers.domain_alias_path('{domain_id}', '{id}') %>'))
+
+  init: () ->
+    @validatePresenceOf ['source', 'destination']
+
+}, {})
+
+window.Alias.prototype.alert = () ->
+  alert('<%= I18n.t('alert.alias') %>')

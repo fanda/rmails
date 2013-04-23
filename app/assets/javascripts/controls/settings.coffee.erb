@@ -1,0 +1,47 @@
+window.Settings = can.Control({
+
+  init: (el) ->
+    @tab( $('#sys_nav li:first').addClass('active') ).show()
+    @model = Property.models JSON.parse($('#system_JSON').text())
+    $('#reject_rbls').chosen
+      allow_single_deselect: true
+    return
+
+  tab: (li) ->
+    $( li.find('a').attr('href') )
+
+  server_update_callback: (res) ->
+    $('.status .warning').remove()
+    $('#system .control-group').removeClass('warning').removeClass('success')
+
+  '#sys_nav li click': (el, ev) ->
+    ev.preventDefault()
+    @tab( $('#sys_nav .active').removeClass('active') ).hide()
+    @tab( el.addClass('active') ).show()
+
+  'option selected': (el, ev) ->
+    alert('selected '+ el.val())
+
+
+  'input change': (el, ev) ->
+    id = el.attr('name').replace('property[', '').replace(']', '')
+    $(".save").removeAttr("disabled")
+    Property.update(id, el.val(), (json) ->
+      if json.result == 'success'
+        el.parents('.control-group').addClass(json.result)
+      else
+        alert('alert.property')
+    )
+
+
+  '.save click': (el, ev) ->
+    ev.preventDefault()
+    data = {}
+    $("#system form input[type=hidden]").each( () ->
+      data[$(this).attr("name")] = $(this).val()
+    )
+    if confirm('Opravdu uložit?')
+      url = '<%= Rails.application.routes.url_helpers.server_update_path %>'
+      $.post(url, data, @server_update_callback, "json")
+
+})

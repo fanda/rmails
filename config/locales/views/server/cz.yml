@@ -1,0 +1,19 @@
+cz:
+  server:
+    msg_rejection: Odmítnuté zprávy
+    auth: Autentizace
+    pop: POP3
+    imap: IMAP
+    storage: Úložiště
+
+    index:
+      title: Nastavení poštovního serveru
+      dovecot: Doručování a uložení e-mailů
+      postfix: Příjem zpráv
+      filtering: Filtrování
+      certificates: Certifikáty
+
+    status:
+      save_info: Provedení změn na serveru
+      submit_button: Aplikovat změny do nastavení serveru a restartovat služby
+      unsaved_warning: Systém našel neuplatněné změny v nastavení. Oranžově označené nastavení má změněnou, ale neuloženou hodnotu.

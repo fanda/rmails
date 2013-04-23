@@ -1,0 +1,11 @@
+= simple_form_for virtual_alias, :url => domain_aliases_path(@domain||'{domain_id}'), :method => :post do |f|
+
+  = f.input :source, :label => t('.source'), :hint => t('.source_hint')
+
+  %i.icon-hand-right
+
+  = f.input :destination, :label => t('.destination'), :as => :text, :hint => t('.dest_hint')
+
+  .actions
+    = f.button :button, t('.create'), :type => 'submit', :class => 'btn-primary right'
+    = f.button :button, t('.reset'), :type => 'reset', :class => 'left'

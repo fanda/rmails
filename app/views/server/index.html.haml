@@ -1,0 +1,36 @@
+- content_for :title do
+  &rarr;
+  = t('.title')
+- content_for :script do
+  :javascript
+    $(document).ready(function() { new window.Settings('#content'); });
+
+#system_JSON.dn= @properties_JSON
+
+
+%ul#sys_nav.nav.nav-pills
+  %li= link_to t('.dovecot'), '#store', 'data-toggle' => 'pill'
+  %li= link_to t('.postfix'), '#submission', 'data-toggle' => 'pill'
+  %li= link_to t('.filtering'), '#filtering', 'data-toggle' => 'pill'
+  %li= link_to t('.certificates'), '#certificates', 'data-toggle' => 'pill'
+
+= render :partial => 'status'
+
+#system
+  = simple_form_for Property.new, :url => server_path,
+          :html => { :class => 'form-horizontal tab-content' } do |f|
+    #submission.tab-pane
+      %h2=t('.postfix')
+      = render :partial => 'postfix_info', :locals => {:form => f }
+    #store.tab-pane
+      %h2=t('.dovecot')
+      = render :partial => 'dovecot', :locals => {:form => f }
+    #filtering.tab-pane
+      %h2=t('.filtering')
+      = render :partial => 'postfix_test', :locals => {:form => f }
+      = render :partial => 'dspam', :locals => {:form => f }
+    #certificates.tab-pane
+      %h2=t('.certificates')
+      = render :partial => 'certificates', :locals => {:form => f }
+
+= render :partial => 'status'

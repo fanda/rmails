@@ -1,0 +1,7 @@
+= simple_form_for domain, :url => domains_path, :method => :post, :html => { :class => 'form-inline' } do |f|
+
+  = f.input :name, :label => t('.name')
+
+  = f.button :submit, :value => t('.create'), :class => 'btn-primary'
+
+  = f.button :button, t('.reset'), :type => 'reset'

@@ -1,0 +1,18 @@
+cz:
+  users:
+    index:
+      title: Schránky
+      title_new: Vytvořit novou schránku
+      title_edit: Upravit schránku
+      edit: Upravit
+      delete: Odstranit
+      create: Přidat shcránku
+      confirm: Opravdu chcete schránku odstranit?
+
+    form:
+      name: Jméno
+      email: E-mail
+      password: Heslo
+      password_confirmation: Potvrzení hesla
+      create: Vytvořit
+      reset: Storno

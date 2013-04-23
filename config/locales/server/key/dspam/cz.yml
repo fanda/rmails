@@ -1,0 +1,10 @@
+cz:
+  server:
+    key:
+      enableBNR: BNR
+      enableWhitelist: Bílá listina
+      statisticalSedation:
+      spamAction: Řešení SPAMu
+      spamSubject: Text do předmětu zprávy
+      signatureLocation: Umístění
+      whitelistThreshold: Mez pro bílou listinu

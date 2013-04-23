@@ -1,13 +1,29 @@
+upstream thin_cluster {
+  server unix:/tmp/thin.0.sock;
+# server unix:/tmp/thin.1.sock;
+}
+<% hostname = hostnames.split('_')[0] %>
 server {
-  server_name <%= hostname %> www.<%= hostname %> ;
+  listen 443;
 
-  access_log /var/www/<%= hostname %>/log/access.log;
+  #ssl on;
+  #ssl_certificate /etc/ssl/certs/https.pem
+  #ssl_certificate_key /etc/ssl/private/https.pem
+
+  server_name <%= hostnames %>;
+
+  access_log /var/log/nginx/<%= hostname %>/access.log;
 
   root /var/www/<%= hostname %>/public;
 
-  if ($host = '<%= prefer_www ? '' : 'www.' %><%= hostname %>' ) {
-    rewrite  ^/(.*)$  http://<%= prefer_www ? 'www.' : '' %><%= hostname %>/$1  permanent;
+  error_page   500 502 504  /500.html;
+
+  if ($request_method !~ ^(GET|HEAD|PUT|POST|DELETE|OPTIONS)$ ){
+    return 405;
   }
+  #if ($host = '<%#= subhostname %><%= hostname %>' ) {
+  #  rewrite  ^/(.*)$  http://<%= '' %><%= hostname %>/$1  permanent;
+  #}
 
   location ~* \.(gz|ico|pdf|jpg|jpeg|gif|png|css|js|swf|html)$ {
     if (-f $request_filename) {
@@ -15,15 +31,10 @@ server {
       break;
     }
   }
-
-  passenger_enabled on;
-#    passenger_use_global_queue on;
-
-  rails_env production;
-
-  error_page   500 502 504  /500.html;
-
-  if ($request_method !~ ^(GET|HEAD|PUT|POST|DELETE|OPTIONS)$ ){
-    return 405;
+  #location / {
+  #  @cluster;
+  #}
+  location @cluster {
+    proxy_pass http://thin_cluster;
   }
 }

@@ -1,0 +1,45 @@
+cz:
+  navigation:
+    domains: Domény
+    server_settings: Nastavení systému
+    admins: Správci systému
+    statistics: Statistiky
+    help: Nápověda
+  update: Změnit
+  loggedin: "Přihlášen:"
+  logout: Odhlásit
+  alert:
+    domain: Doména nemá vyplněné jméno.
+
+  activerecord:
+    attributes:
+      admin_user:
+        email: E-mail
+        name: Jméno
+        password: Heslo
+        password_confirmation: Potvrzení hesla
+        remember_me: Pamatovat si mne
+      virtual_domain:
+        name: Název domény
+      virtual_user:
+        name: Jméno
+        email: Email
+        password: Heslo
+        password_confirmation: Potvrzení hesla
+        remember_me: Pamatovat si mne
+      virtual_alias:
+        source: Co
+        destination: Kam
+      property:
+        key: Klíč
+        value: Hodnota
+
+    errors:
+      messages:
+        record_invalid: Uvedená data nejsou v pořádku.
+      models:
+        virtual_domain:
+          attributes:
+            name:
+              blank: Název domény musí být vyplněn.
+              invalid: "Název domény má špatný formát. Správně např.: example.com"

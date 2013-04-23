@@ -1,0 +1,37 @@
+Defaults	env_reset
+Defaults	secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+# Host alias specification
+
+# User alias specification
+
+# Cmnd alias specification
+
+# User privilege specification
+root	ALL=(ALL:ALL) ALL
+
+# Members of the admin group may gain root privileges
+%admin ALL=(ALL) ALL
+
+# Allow members of group sudo to execute any command
+%sudo	ALL=(ALL:ALL) ALL
+
+%rmails ALL = NOPASSWD: /etc/init.d/postfix start,  \
+                        /etc/init.d/postfix stop,   \
+                        /etc/init.d/dovecot start,  \
+                        /etc/init.d/dovecot stop,   \
+                        /etc/init.d/nginx start,    \
+                        /etc/init.d/nginx stop,     \
+                        /etc/init.d/dspam start,    \
+                        /etc/init.d/dspam stop,     \
+                        /etc/init.d/opendkim start, \
+                        /etc/init.d/opendkim stop   \
+                        /etc/init.d/amavis start,   \
+                        /etc/init.d/amavis stop     \
+                        /etc/init.d/spamassassin start, \
+                        /etc/init.d/spamassassin stop
+
+
+
+# See sudoers(5) for more information on "#include" directives:
+#includedir /etc/sudoers.d
