@@ -25,6 +25,10 @@ class Property < ActiveRecord::Base
         p.service = DSPAM
       when :nginx
         p.service = NGINX
+      when :amavis
+        p.service = AMAVIS
+      when :spamassassin
+        p.service = SPAMASSASSIN
       else
     end
     p.save
@@ -91,13 +95,14 @@ class Property < ActiveRecord::Base
 
 protected
 
-  APPLICATION = 0
+  APPLICATION   = 0
 
-  POSTFIX     = 1
-  DOVECOT     = 2
-  NGINX       = 3
-  DSPAM       = 4
-  AMAVIS      = 5
-  AWSTATS     = 6
+  POSTFIX       = 1
+  DOVECOT       = 2
+  NGINX         = 3
+  DSPAM         = 4
+  AMAVIS        = 5
+  AWSTATS       = 6
+  SPAMASSASSIN  = 7
 
 end

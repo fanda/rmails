@@ -1,7 +1,7 @@
 etc_awstats   = '/etc/awstats'
 log_awstats   = '/var/log/mail.log'
 awstats_tools = '/usr/share/awstats/tools'
-awstats_out   = '/var/lib/awstats/outputs'
+awstats_out   = lookup('awstats#data_path')
 bin = '/usr/bin'
 
 render(
@@ -26,15 +26,19 @@ locals = {
 }
 render(
     :file   => "#{dist}awstats/awstats.mail.conf.erb",
-    :to     => "#{etc_awstats}/awstats.mail.conf",
+    :to     => "#{etc_awstats}/awstats.#{lookup('hostname')}.conf",
     :locals => locals,
-    :mode   => 400,
+    :mode   => 0765,
     :owner  => 'root',
     :group  => 'rmails'
 )
 
 
+shell_manager.mkdir_p "#{awstats_out}/#{lookup('hostname')}"
+shell_manager.mkdir_p "#{awstats_out}/.html"
 
+shell_manager.chperm "#{awstats_out}",
+  :group => 'rmails', :mode => 0777, :recursive => true
 
 #shell_manager.chmod '400', "#{etc_awstats}/*.conf"
 
@@ -45,5 +49,5 @@ render(
 #shell_manager.sh "(crontab -l; echo '00 1 * * * /usr/bin/perl #{bin}/awstats_buildstaticpages.pl -update -config=mail' -dir=/var/www/mailstats -awstatsprog=/usr/lib/cgi-bin/awstats.pl) | crontab -"
 
 
-shell_manager.sh "(echo '00 1 * * * /usr/bin/perl #{bin}/awstats_buildstaticpages.pl -update -config=mail -dir=/var/www/mailstats -awstatsprog=/usr/lib/cgi-bin/awstats.pl
-00 1 * * * /usr/bin/perl /usr/lib/cgi-bin/awstats.pl -update -config=mail') | crontab -"
+shell_manager.sh "(echo '00 1 * * * /usr/bin/perl #{bin}/awstats_buildstaticpages.pl -update -config=#{lookup('hostname')} -dir=#{awstats_out}/.html -awstatsprog=/usr/lib/cgi-bin/awstats.pl
+00 1 * * * /usr/bin/perl /usr/lib/cgi-bin/awstats.pl -update -config=#{lookup('hostname')}') | crontab -"

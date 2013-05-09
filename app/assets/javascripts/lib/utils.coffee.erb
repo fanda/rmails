@@ -46,3 +46,25 @@ String.prototype.model = () ->
   return can.capitalize( this.replace( /[-_]([a-z])/ig, (z,b) ->
     return b.toUpperCase()
   ))
+
+
+# coffee script from this http://www.dyn-web.com/tutorials/iframes/height/demo.php
+window.getDocHeight = (doc) ->
+    doc ||= document
+    body = doc.body
+    html = doc.documentElement
+    return Math.max(
+        body.scrollHeight, body.offsetHeight,
+        html.clientHeight, html.scrollHeight, html.offsetHeight
+    )
+
+window.setIframeHeight = (el) ->
+    doc = if el.contentDocument
+      el.contentDocument
+    else
+      el.contentWindow.document
+    el.style.visibility = 'hidden'
+    el.style.height = "10px"
+    # IE opt. for bing/msn needs a bit added or scrollbar appears
+    el.style.height = window.getDocHeight( doc ) + 4 + "px"
+    el.style.visibility = 'visible'

@@ -1,0 +1,11 @@
+window.Stats = can.Control({
+
+  init: (el, opt) ->
+    @opt = opt
+    @ifr = $(el).find('iframe')
+    @ifr.contents().find('a[target="awstatshome"]').hide().find('img').hide()
+    @ifr.contents().find('body').css('background-color', '#e6e6e6')
+    return
+
+
+})

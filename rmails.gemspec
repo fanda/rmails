@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name               = "rmails"
-  s.version            = '0.1.1' #Rmails::VERSION
+  s.version            = '0.1.2' #Rmails::VERSION
   s.default_executable = "rmails"
   s.license            = 'MIT'
 

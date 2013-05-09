@@ -9,7 +9,9 @@ end
 
 site_path = "#{etc_nginx}/#{sites_available}/rmails"
 locals = {
-    :hostnames => lookup('hostname')
+    :hostnames => lookup('hostname'),
+    :awstats_out => lookup('awstats#data_path'),
+    :rmails_root => rails_root
 }
 render(
     :file   => "#{dist}nginx/rmails.erb",
@@ -27,3 +29,15 @@ unless File.symlink? "#{etc_nginx}/#{sites_enabled}/0_rmails"
                       "#{etc_nginx}/#{sites_enabled}/0_rmails"
 end
 
+shell_manager.mkdir_p "/etc/thin"
+locals = {
+    :rmails_root => rails_root
+}
+render(
+    :file   => "#{dist}rmails/thin.yml.erb",
+    :to     => "/etc/thin/rmails.yml",
+    :mode   => 0664,
+    :locals => locals,
+    :backup => false
+)
+shell_manager.chown('root', 'rmails', "/etc/thin/rmails.yml")

@@ -1,29 +1,55 @@
 #!/usr/bin/env ruby
-#/ Usage: rmails --install
+#/ Usage: rmails action
+#/
+#/ Actions:
+#/    --install
 #/        Install all compoments of the system.
 #/        You must be root to run this.
-# ** Tip: use #/ lines to define the --help usage message.
+#/    --start
+#/        Starts server of configuration app.
+#/        You may have to be root to run this.
+#/    --stop
+#/        Stops server of configuration app.
+#/        You may have to be root to run this.
+
 
 $stderr.sync = true
 
 require 'optparse'
 require File.expand_path('../../config/application', __FILE__)
 require 'rmails/installer'
+require 'rmails/runner'
 
 # default options
 install = false
+start   = false
+stop    = false
 
 # parse arguments
 file = __FILE__
 ARGV.options do |opts|
   opts.on("--install")                 { |install| }
+  opts.on("--start")                   { |start|   }
+  opts.on("--stop")                    { |stop|   }
   opts.on_tail("-h", "--help")         { exec "grep ^#/<'#{file}'|cut -c4-" }
   opts.parse!
 end
 
+
+if not(install or start or stop) or(start and stop)
+  exec "grep ^#/<'#{file}'|cut -c4-"
+
 if install
   setup = Rmails::Installer.new
   setup.run
-else
-  exec "grep ^#/<'#{file}'|cut -c4-"
+
+elsif start
+  app = Rmails::Runner.new
+  app.start
 end
+
+elsif stop
+  app = Rmails::Runner.new
+  app.stop
+end
+

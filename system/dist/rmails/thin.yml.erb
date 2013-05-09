@@ -1,0 +1,21 @@
+---
+group: rmails
+environment: production
+timeout: 30
+wait: 30
+max_conns: 1024
+require: []
+address: 0.0.0.0
+port: 3000
+
+max_persistent_conns: 100
+pid: tmp/pids/thin.pid
+socket: /tmp/thin.sock
+daemonize: true
+threaded: false
+no-epoll: true
+onebyone: true
+servers: 1
+chdir: <%= rmails_root %>
+log: /var/log/thin/rmails.log
+tag: rmails

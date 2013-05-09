@@ -22,7 +22,7 @@ Property.add :dovecot,      'storage_spam',                        '10%', 'stora
 
 Property.add :postfix,      'message_size_limit',                  '15728640', 'main_value+number'
 Property.add :postfix,      'mail_name',                           'Rmails', 'main_value+string'
-Property.add :postfix,      'myhostname',                          'rmails.com', 'main_value+string'
+Property.add :postfix,      'myhostname',                          'mail.rmails.com', 'main_value+string'
 Property.add :postfix,      'mydomain',                            'rmails.com', 'main_value+string'
 Property.add :postfix,      'smtpd_banner',                        "$myhostname ESMTP $mail_name", 'main_value+string'
 Property.add :postfix,      'mynetworks',                          '192.168.0.0/16 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128', 'main_value+string'
@@ -43,3 +43,18 @@ Property.add :rmails,       'smtpd_cert',                          '', 'cert'
 Property.add :rmails,       'https_cert',                          '', 'cert'
 Property.add :rmails,       'dkim_cert',                           '', 'cert'
 
+Property.add :amavis,       'max_servers',                         '2', 'number_variable+number'
+Property.add :amavis,       'mydomain',                            'rmails.com', 'string_variable+string'
+Property.add :amavis,       'sa_tag_level_deflt',                  '-999', 'number_variable+number'
+Property.add :amavis,       'sa_tag2_level_deflt',                 '5.0', 'number_variable+number'
+Property.add :amavis,       'sa_spam_subject_tag',                 '***SPAM*** ', 'string_variable+string'
+Property.add :amavis,       'sa_tag_level_deflt',                  '2.0', 'number_variable+number'
+Property.add :amavis,       'sa_tag2_level_deflt',                 '6.31', 'number_variable+number'
+Property.add :amavis,       'sa_kill_level_deflt',                 '6.31', 'number_variable+number'
+Property.add :amavis,       'sa_dsn_cutoff_level',                 '10', 'number_variable+number'
+Property.add :amavis,       'sa_mail_body_size_limit',             '200*1024', 'number_variable+number'
+Property.add :amavis,       'sa_local_tests_only',                 '1', 'binary+boolean'
+
+Property.add :spamassassin, 'required_score',                      '5.0', 'preference+number'
+
+#Property.add :,       '',             '', ''

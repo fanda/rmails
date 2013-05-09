@@ -18,8 +18,12 @@ Rmails::Application.routes.draw do
   match 'server/save_config' => 'server#update',
              :as => 'server_update'
 
+  match 'statistics' => 'statistics#index',
+             :as => 'statistics'
 
-  root :to => 'domains#index'
+  devise_scope :admin_user do
+    root :to => "devise/sessions#new"
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

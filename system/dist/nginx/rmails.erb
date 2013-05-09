@@ -1,22 +1,17 @@
-upstream thin_cluster {
+upstream thin {
+  ip_hash;
   server unix:/tmp/thin.0.sock;
-# server unix:/tmp/thin.1.sock;
+#  server unix:/tmp/thin.1.sock;
 }
 <% hostname = hostnames.split('_')[0] %>
 server {
-  listen 443;
+  listen      80 default;
+  server_name <%= hostnames %>;
+  root        <%= rmails_root %>/public;
 
   #ssl on;
   #ssl_certificate /etc/ssl/certs/https.pem
   #ssl_certificate_key /etc/ssl/private/https.pem
-
-  server_name <%= hostnames %>;
-
-  access_log /var/log/nginx/<%= hostname %>/access.log;
-
-  root /var/www/<%= hostname %>/public;
-
-  error_page   500 502 504  /500.html;
 
   if ($request_method !~ ^(GET|HEAD|PUT|POST|DELETE|OPTIONS)$ ){
     return 405;
@@ -25,16 +20,44 @@ server {
   #  rewrite  ^/(.*)$  http://<%= '' %><%= hostname %>/$1  permanent;
   #}
 
+  location ~ ^/s/(.*)$ {
+    alias  <%= awstats_out %>/.html/$1;
+  }
+  location / {
+    proxy_set_header  X-Real-IP  $remote_addr;
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_redirect off;
+
+    #if (-f $request_filename/index.html) {
+    #   rewrite (.*) $1/index.html break;
+    #}
+
+    #if (-f $request_filename.html) {
+    #   rewrite (.*) $1.html break;
+    #}
+
+    #if (!-f $request_filename) {
+       proxy_pass http://thin;
+    #   break;
+    #}
+    try_files $uri @rmails;
+  }
+  location @rmails {
+    proxy_pass http://thin;
+  }
   location ~* \.(gz|ico|pdf|jpg|jpeg|gif|png|css|js|swf|html)$ {
     if (-f $request_filename) {
       expires max;
       break;
+		  #add_header Cache-Control "public, must-revalidate, proxy-revalidate";
     }
   }
-  #location / {
-  #  @cluster;
-  #}
-  location @cluster {
-    proxy_pass http://thin_cluster;
-  }
+
+
+
+  access_log /var/log/nginx/<%= hostname %>/access.log;
+  error_log /var/log/nginx/<%= hostname %>/error.log;
+
+  error_page   500 502 504  /500.html;
 }

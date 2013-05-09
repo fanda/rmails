@@ -1,0 +1,11 @@
+- content_for :title do
+  &rarr;
+  = t('.title')
+- content_for :script do
+  :javascript
+    $(document).ready(function() { new window.Stats('#stats'); });
+
+
+
+#stats
+  %iframe{:src => '/s/awstats.mail.rmails.com.html', :name => 'stats', :onload => 'window.setIframeHeight(this);'}
