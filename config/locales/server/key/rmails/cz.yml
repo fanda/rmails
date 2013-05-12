@@ -1,0 +1,6 @@
+cz:
+  server:
+    key:
+      smtpd_cert:
+      https_cert:
+      dkim_cert:

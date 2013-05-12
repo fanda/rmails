@@ -1,3 +1,28 @@
 en:
   server:
+    msg_rejection: Message Rejection
+    auth: Autentication
+    pop: POP3
+    imap: IMAP
+    storage: Storage
+    dspam_preferences: DSpam filter settings
+    amavis_preferences: Amavis deamon settings
+    sa_preferences: Spamassassin
+    dkim: DKIM
+    https: HTTP over SSL
+    smtpd: SMTP
+    info: Information about SMTP server
+    sender_test: Testing of sender
+    content_test: Testing of mail content
+
+    index:
+      title: Mail server settings
+      dovecot: Delivering and mail storage
+      postfix: Incoming messages
+      filtering: Filters
+      certificates: Certificates
+
     status:
+      save_info: Approving system changes
+      submit_button: Make it so!
+      unsaved_warning: System found changes undone changes in configuration. Orange colored settings have changed, but are not approved.

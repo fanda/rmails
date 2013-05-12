@@ -5,10 +5,10 @@
 #/    --install
 #/        Install all compoments of the system.
 #/        You must be root to run this.
-#/    --start
+#/    --start-app
 #/        Starts server of configuration app.
 #/        You may have to be root to run this.
-#/    --stop
+#/    --stop-app
 #/        Stops server of configuration app.
 #/        You may have to be root to run this.
 
@@ -29,8 +29,8 @@ stop    = false
 file = __FILE__
 ARGV.options do |opts|
   opts.on("--install")                 { |install| }
-  opts.on("--start")                   { |start|   }
-  opts.on("--stop")                    { |stop|   }
+  opts.on("--start-app")               { |start|   }
+  opts.on("--stop-app")                { |stop|    }
   opts.on_tail("-h", "--help")         { exec "grep ^#/<'#{file}'|cut -c4-" }
   opts.parse!
 end

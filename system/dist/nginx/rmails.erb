@@ -21,7 +21,7 @@ server {
   #}
 
   location ~ ^/s/(.*)$ {
-    alias  <%= awstats_out %>/.html/$1;
+    alias  <%= awstats_out||'/var/awstats' %>/.html/$1;
   }
   location / {
     proxy_set_header  X-Real-IP  $remote_addr;

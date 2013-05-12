@@ -1,7 +1,14 @@
 en:
-  server:
-    msg_rejection: Message Rejection
-    auth: Autentication
-    pop: POP3
-    imap: IMAP
-    storage: Storage
+  collection:
+    yes_no:
+      "yes": Yes
+      "no": NO
+    on_off:
+      "on": On
+      "off": Off
+    select_from_enum:
+      deliver: Deliver
+      tag: Tag
+      quarantine: Quatantine
+      message: Message
+      headers: Header

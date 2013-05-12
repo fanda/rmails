@@ -29,6 +29,8 @@
       %h2=t('.filtering')
       = render :partial => 'postfix_test', :locals => {:form => f }
       = render :partial => 'dspam', :locals => {:form => f }
+      = render :partial => 'amavis', :locals => {:form => f }
+
     #certificates.tab-pane
       %h2=t('.certificates')
       = render :partial => 'certificates', :locals => {:form => f }

@@ -1,0 +1,10 @@
+en:
+  server:
+    key:
+      message_size_limit:
+      mail_name:
+      myhostname:
+      mydomain:
+      smtpd_banner:
+      mynetworks:
+      reject_rbls:

@@ -1,19 +1,20 @@
 cz:
   admin_users:
     index:
+      new_user: Nový uživatel
       title: Správci systému
       create: Přidat správce
       reset: Storno
       manage: Zobrazit
       nomanage: Skrýt
-      infos: Informace
-      domains: Domény, které spravuje
     form:
       name: Jméno
       email: E-mail
       super: Supersprávce
       create: Uložit
       reset: Storno
+      infos: Základní informace
+      domains: Domény, které spravuje
 
     first:
       first_admin_user: Vytvoření prvního správce

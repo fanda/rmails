@@ -1,0 +1,16 @@
+= field_set_tag t('server.amavis_preferences') do
+  = property_input form, @properties['max_servers']
+  = property_input form, @properties['mydomain']
+  = property_input form, @properties['sa_tag_level_deflt']
+  = property_input form, @properties['sa_tag2_level_deflt']
+  = property_input form, @properties['sa_spam_subject_tag']
+  = property_input form, @properties['sa_tag_level_deflt']
+  = property_input form, @properties['sa_tag2_level_deflt']
+  = property_input form, @properties['sa_kill_level_deflt']
+  = property_input form, @properties['sa_dsn_cutoff_level']
+  = property_input form, @properties['sa_mail_body_size_limit']
+  = property_input form, @properties['sa_local_tests_only']
+
+= field_set_tag t('server.sa_preferences') do
+  = property_input form, @properties['required_score']
+

@@ -1,5 +1,27 @@
 en:
-  index:
+  admin_users:
+    index:
+      new_user: New admin user
+      title: Admin users
+      create: Create new admin user
+      reset: Cancel
+      manage: Show
+      nomanage: Hide
 
-  form:
+    form:
+      name: Name
+      email: E-mail
+      super: Superuser
+      create: Save
+      reset: Cancel
+      infos: Basic information
+      domains: His/Her domains
+
+    first:
+      first_admin_user: First admin user creation
+      name: Name
+      email: E-mail
+      pass: Password
+      passs: Password confirmation
+      create: Create
 

@@ -5,6 +5,15 @@ cz:
     pop: POP3
     imap: IMAP
     storage: Úložiště
+    dspam_preferences: Nastavení filtru DSpam
+    amavis_preferences: Nastavení filtru Amavis
+    sa_preferences: Spamassassin
+    dkim: DKIM
+    https: HTTP přes SSL
+    smtpd: SMTP
+    info: Informace o SMTP serveru
+    sender_test: Testování odesílatele
+    content_test: Testování obsahu zprávy
 
     index:
       title: Nastavení poštovního serveru

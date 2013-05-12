@@ -1,0 +1,14 @@
+cz:
+  server:
+    key:
+      max_servers:
+      mydomain:
+      sa_tag_level_deflt:
+      sa_tag2_level_deflt:
+      sa_spam_subject_tag:
+      sa_tag_level_deflt:
+      sa_tag2_level_deflt:
+      sa_kill_level_deflt:
+      sa_dsn_cutoff_level:
+      sa_mail_body_size_limit:
+      sa_local_tests_only:

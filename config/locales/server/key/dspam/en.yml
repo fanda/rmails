@@ -1,4 +1,10 @@
 en:
   server:
     key:
-
+      enableBNR:
+      enableWhitelist:
+      statisticalSedation:
+      spamAction:
+      spamSubject:
+      signatureLocation:
+      whitelistThreshold:

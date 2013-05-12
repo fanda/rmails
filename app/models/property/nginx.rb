@@ -4,7 +4,7 @@ class Property::Nginx < Property
 
   default_scope where(:service => self.service)
 
-  def self.render_thin_site_template(a, site, key_value_string)
+  def self.render_rmails_site_template(a, site, key_value_string)
     # example key_value_string= 'hostnames=rmails.com www.rmails.com;a=b;c=d'
     locals = Hash[ key_value_string.split(';').map  {|it|  it.split('=', 2)  } ]
     site_path = "#{etc_nginx}/#{sites_available}/#{site}"
@@ -12,7 +12,7 @@ class Property::Nginx < Property
       :file   => "#{dist}nginx/rmails.erb",
       :to     => site_path,
       :mode   => 0664,
-      :locals => locals
+      :locals => {:rails_root => Rails.root}.merge(locals)
     )
   end
 

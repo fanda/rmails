@@ -1,0 +1,10 @@
+en:
+  server:
+    help:
+      message_size_limit: "The maximal size in bytes of a message, including envelope information. Note: be careful when making changes. Excessively small values will result in the loss of non-delivery notifications, when a bounce message size exceeds the local or remote MTA's message size limit."
+      mail_name: "The mail system name that is displayed in Received: headers, in the SMTP greeting banner, and in bounced mail."
+      myhostname: The internet hostname of this mail system.
+      mydomain: The internet domain name of this mail system.
+      smtpd_banner: The text that follows the 220 status code in the SMTP greeting banner. You MUST specify $myhostname at the start of the text. This is required by the SMTP protocol.
+      mynetworks: The list of "trusted" remote SMTP clients that have more privileges than "strangers". In particular, "trusted" SMTP clients are allowed to relay mail through Postfix.
+      reject_rbls: Use these RBL services.

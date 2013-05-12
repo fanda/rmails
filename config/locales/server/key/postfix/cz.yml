@@ -1,0 +1,10 @@
+cz:
+  server:
+    key:
+      message_size_limit: Limit velikosti zprávy
+      mail_name: Název serveru
+      myhostname: Doména poštovního serveru
+      mydomain: Doména e-mailové služby
+      smtpd_banner: Zpráva serveru
+      mynetworks: Povolené sítě
+      reject_rbls: Povolené černé listiny

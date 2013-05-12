@@ -28,13 +28,13 @@ Property.add :postfix,      'smtpd_banner',                        "$myhostname 
 Property.add :postfix,      'mynetworks',                          '192.168.0.0/16 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128', 'main_value+string'
 Property.add :postfix,      'reject_rbls',                         '+bl.spamcop.net;+dnsbl.sorbs.net;+zen.spamhaus.org', 'rbl_client+multiselect_from_list'
 
-Property.add :nginx,        'site:app',                            'hostnames=rmails.com www.rmails.com', 'render_thin_site+key_value'
+Property.add :nginx,        'site:app',                            'hostnames=rmails.com www.rmails.com;', 'render_rmails_site+key_value'
 
 Property.add :dspam,        'enableBNR',                           'on', 'on_off_pref+on_off'
 Property.add :dspam,        'enableWhitelist',                     'on', 'on_off_pref+on_off'
 Property.add :dspam,        'whitelistThreshold',                  '10', 'preference+number'
 Property.add :dspam,        'statisticalSedation',                 '5', 'preference+number'
-Property.add :dspam,        'spamSubject',                         '[SPAM]', 'preference+string'
+Property.add :dspam,        'spamSubject',                         '[SPAM] ', 'preference+string'
 Property.add :dspam,        'spamAction',                          'quarantine;deliver;+tag', 'enum+select_from_enum'
 Property.add :dspam,        'signatureLocation',                   '+headers;message', 'enum+select_from_enum'
 
@@ -47,7 +47,7 @@ Property.add :amavis,       'max_servers',                         '2', 'number_
 Property.add :amavis,       'mydomain',                            'rmails.com', 'string_variable+string'
 Property.add :amavis,       'sa_tag_level_deflt',                  '-999', 'number_variable+number'
 Property.add :amavis,       'sa_tag2_level_deflt',                 '5.0', 'number_variable+number'
-Property.add :amavis,       'sa_spam_subject_tag',                 '***SPAM*** ', 'string_variable+string'
+Property.add :amavis,       'sa_spam_subject_tag',                 '[SPAM] ', 'string_variable+string'
 Property.add :amavis,       'sa_tag_level_deflt',                  '2.0', 'number_variable+number'
 Property.add :amavis,       'sa_tag2_level_deflt',                 '6.31', 'number_variable+number'
 Property.add :amavis,       'sa_kill_level_deflt',                 '6.31', 'number_variable+number'

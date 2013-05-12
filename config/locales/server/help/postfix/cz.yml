@@ -1,0 +1,10 @@
+cz:
+  server:
+    help:
+      message_size_limit: "Maximální velikost zprávy v bytech, včetně informací v obálce zprávy. Pozn.: mělo by se nastavovat opatrně. Velmi malé hodnoty budou mít za následek ztrátu oznámení o nedoručení, pokud vrácená zpráva překročí limit."
+      mail_name: "Jméno poštovního systému, které se zobrazí v hlavičce (Received:), v uvítací zprávě a ve vrácené zprávě."
+      myhostname: Identifikace tohoto poštovního serveru v internetu.
+      mydomain: Výchozí doména, kterou používá tento poštovní server.
+      smtpd_banner: Text, který následuje za stavovým kódem 220 v uvítací zprávě. Protokol vyžaduje, aby první slovo bylo $myhostname.
+      mynetworks: Seznam důvěryhodných SMTP klientů, kteří mají větší privilegia než "cizí" klienti. Z těchto adres je dovoleno chování odesílání zpráv bez autentizace.
+      reject_rbls: Tyto "real-time" černé listy se použijí ke kontrole odesílatelů.
