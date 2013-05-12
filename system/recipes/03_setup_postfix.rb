@@ -112,7 +112,7 @@ edit :file => "/etc/opendkim.conf" do
 end
 
 # generate "default" key
-key_table, signing_table = generate_dkim_key lookup('postfix#mydomain'), 'default'
+key_table, signing_table = generate_dkim_key lookup('postfix#mydomain')
 
 render :to => '/etc/opendkim/KeyTable',     :text => key_table
 render :to => "/etc/opendkim/SigningTable", :text => signing_table

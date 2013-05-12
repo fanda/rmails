@@ -30,6 +30,7 @@ class Property < ActiveRecord::Base
       when :spamassassin
         p.service = SPAMASSASSIN
       else
+        p.service = APPLICATION
     end
     p.save
   end

@@ -27,12 +27,21 @@ class CertificateManager
     @i.shell_manager.sh "openssl req -new -newkey rsa:4096 -x509 -days 3650 -nodes -out /etc/ssl/certs/https.pem -keyout /etc/ssl/private/https.pem -subj /C=/ST=/L=/O=/OU=/CN=#{params[:name]||Property.find_by_key('mydomain').value}/emailAddress=#{params[:email]}"
   end
 
-  def dkim_cert_gen(domain, keyname=domain)
-    @i.shell_manager.sh("opendkim-genkey -r -d #{keyname} -D /etc/ssl/dkim")
-    @i.shell_manager.chown 'opendkim', 'opendkim', "/etc/ssl/dkim/#{keyname}.private"
+  def dkim_cert_gen(domain, selector)
+    @i.shell_manager.sh("opendkim-genkey -r -s #{selector} -d #{domain} -D /etc/ssl/dkim")
+    @i.shell_manager.chown 'opendkim', 'opendkim', "/etc/ssl/dkim/#{selector}.private"
 
-    key_table = "default._domainkey.#{keyname} #{domain}:default:/etc/ssl/dkim/#{keyname}.private"
-    signing_table = "#{domain} default._domainkey.#{keyname}"
+    @i.chown 'opendkim', 'opendkim', "/etc/ssl/dkim/#{selector}.private"
+    @i.chown 'opendkim', 'rmails', "/etc/ssl/dkim/#{selector}.txt"
+    @i.chmod 0660, "/etc/ssl/dkim/#{selector}.txt"
+
+    # correct bad dns record
+    edit "/etc/ssl/dkim/#{selector}.txt" do
+      replace ';=rsa;', ";k=rsa;"
+    end
+
+    key_table = "#{selector}._domainkey.#{domain} #{domain}:#{selector}:/etc/ssl/dkim/#{selector}.private"
+    signing_table = "*@#{domain} #{selector}._domainkey.#{domain}"
 
     @i.edit :file => '/etc/opendkim/KeyTable' do
       append key_table

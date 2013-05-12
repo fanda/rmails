@@ -1,10 +1,18 @@
 = field_set_tag t('server.dkim') do
   -#= property_input form, @properties['dkim_cert']
 
+  %h5=t '.dkim_dns_records'
+  %pre
+    = `cat /etc/ssl/dkim/default.txt`
+
+
 = field_set_tag t('server.https') do
   -#= property_input form, @properties['https_cert']
-
+  %button.btn#regenerate_cert_https{:disabled => true}
+    =t '.regenerate_cert_https'
 
 = field_set_tag t('server.smtpd') do
   -#= property_input form, @properties['smtpd_cert']
+  %button.btn#regenerate_cert_smtpd{:disabled => true}
+    =t '.regenerate_cert_smtpd'
 

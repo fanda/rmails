@@ -26,3 +26,8 @@ en:
       save_info: Approving system changes
       submit_button: Make it so!
       unsaved_warning: System found changes undone changes in configuration. Orange colored settings have changed, but are not approved.
+
+    certificates:
+      dkim_dns_records: List of DNS records
+      regenerate_cert_https: Regenerate HTTPS certificate
+      regenerate_cert_smtpd: Regenerate SMTPD certificate
