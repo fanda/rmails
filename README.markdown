@@ -17,6 +17,12 @@ Tested with ruby 1.8.7 and 1.9.3.
 Rubygems required.
 
 
+Project Maturity
+----------------
+
+It is not a mature project and small modifications in configuration may be needed. Application tests have not been created yet.
+
+
 Installation
 ------------
 
