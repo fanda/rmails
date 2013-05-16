@@ -16,6 +16,8 @@ Tested with ruby 1.8.7 and 1.9.3.
 
 Rubygems required.
 
+Git required (for [AutomateIt dependency](https://github.com/fanda/automateit))
+
 
 Project Maturity
 ----------------

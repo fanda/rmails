@@ -1,5 +1,6 @@
-PATH
-  remote: vendor/gems/automateit
+GIT
+  remote: git://github.com/fanda/automateit.git
+  revision: 959e23be77c9054e712e670110632883d1a92c61
   specs:
     automateit (0.0.0)
 

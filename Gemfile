@@ -7,7 +7,7 @@ gem 'devise'
 gem 'thin'
 gem 'pg'
 
-gem 'automateit', '0.0.0', :path => "vendor/gems/automateit"
+gem 'automateit', '0.0.0', :git => 'git://github.com/fanda/automateit.git'
 
 gem 'simple_form'
 gem 'paper_trail'
