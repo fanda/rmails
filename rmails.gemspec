@@ -8,10 +8,10 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pavel Novotny"]
-  s.date = %q{2013-01-12}
+  s.date = Rmails::RELEASE
   s.description = %q{Setup for e-mail server and its admin application}
   s.email = %q{fandisek@gmail.com}
-  s.homepage = %q{http://rubygems.org/gems/rmails}
+  s.homepage = %q{https://github.com/fanda/rmails}
   s.rubygems_version = %q{1.6.2}
   s.summary = %q{Autoinstall e-mail server and configure it with Ruby on Rails}
   s.bindir = 'bin'

@@ -16,8 +16,6 @@ Tested with ruby 1.8.7 and 1.9.3.
 
 Rubygems required.
 
-Git required (for [AutomateIt dependency](https://github.com/fanda/automateit))
-
 
 Project Maturity
 ----------------
@@ -33,7 +31,7 @@ Via rubygems.org:
     gem install rmails
 
 
-Using git:
+Using git (recommended as in development)
 
     https://github.com/fanda/rmails.git
 
@@ -41,15 +39,44 @@ Using git:
 Getting Started
 ---------------
 
-Script rmails should be added, then
+=== GIT (recommended)
 
-    rmails --install
+
+Use git for installation:
+
+    git clone https://github.com/fanda/rmails.git
+
+Then install all dependencies with bundler
+
+    bundle install
+
+
+And finally run the script
+
+    bin/rmails --install
 
 
 to install all necessary programs, make initial configuration and start system services.
 
 Web application for administration can be started with
 
-    rmails --start-app
+    bin/rmails --start-app
 
 
+=== Rubygems
+
+There may still be some errors with install script, but *rmails* script would be added in your PATH, so all you have to do is:
+
+    rmails  --install
+
+to install all necessary programs, make initial configuration and start system services.
+
+Web application for administration can be started with
+
+    bin/rmails --start-app
+
+
+License
+-------
+
+Rmails is released under the [MIT License](https://github.com/fanda/rmails/blob/devel/LICENSE.txt)
