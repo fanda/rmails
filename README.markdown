@@ -33,13 +33,13 @@ Via rubygems.org:
 
 Using git (recommended as in development)
 
-    https://github.com/fanda/rmails.git
+    git clone https://github.com/fanda/rmails.git
 
 
 Getting Started
 ---------------
 
-=== GIT (recommended)
+### GIT (recommended)
 
 
 Use git for installation:
@@ -48,12 +48,12 @@ Use git for installation:
 
 Then install all dependencies with bundler
 
-    bundle install
+    cd rmails; bundle install
 
 
-And finally run the script
+And finally run rake task as the root or with sudo
 
-    bin/rmails --install
+    sudo rake system:install
 
 
 to install all necessary programs, make initial configuration and start system services.
@@ -62,12 +62,16 @@ Web application for administration can be started with
 
     bin/rmails --start-app
 
+or
 
-=== Rubygems
+    rails server
+
+
+### Rubygems
 
 There may still be some errors with install script, but *rmails* script would be added in your PATH, so all you have to do is:
 
-    rmails  --install
+    sudo rmails  --install
 
 to install all necessary programs, make initial configuration and start system services.
 
