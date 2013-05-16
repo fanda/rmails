@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'bundler'
   s.add_dependency 'hoe'
   s.add_dependency 'open4'
+  s.add_dependency 'automate-it'
   s.add_dependency 'rails'
   s.add_dependency 'devise'
   s.add_dependency 'thin'
