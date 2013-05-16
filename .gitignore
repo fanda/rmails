@@ -19,3 +19,4 @@ spec
 .box
 .box/**/*
 *.gem
+Gemfile.lock
