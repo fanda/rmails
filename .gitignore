@@ -40,3 +40,5 @@ bin/sass
 bin/sass-convert
 bin/scss
 bin/thin
+Gemfile
+Gemfile.lock
