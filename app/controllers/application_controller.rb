@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   def any_admin_user_exists?
     return if current_admin_user
     if AdminUser.first.nil?
-      redirect_to :action => 'first', :controller => 'admin_users'
+      redirect_to first_admin_user_path
     end
   end
 

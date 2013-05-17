@@ -35,4 +35,8 @@ bin/sprockets
 bin/thor
 bin/tilt
 bin/tt
-vendor/gems/automateit
+bin/haml
+bin/sass
+bin/sass-convert
+bin/scss
+bin/thin

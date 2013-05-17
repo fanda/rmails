@@ -39,7 +39,7 @@ password = lookup('postfix#database#password')
     CREATE USER dovecot ENCRYPTED password '#{password}';
     CREATE ROLE rmails_app WITH USER postfix, dovecot LOGIN PASSWORD '#{password}';
     CREATE DATABASE rmails OWNER rmails_app;
-  EOF", :quiet => true
+EOF", :quiet => true
 #end
 
 # render rails database definition
