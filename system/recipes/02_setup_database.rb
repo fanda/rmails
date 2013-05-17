@@ -32,7 +32,7 @@ service_manager.restart("postgresql")
 # get password for database connection
 password = lookup('postfix#database#password')
 
-if 1 ==`sudo -u postgres psql -l | grep -w rmails | wc -l`
+#if '1'==`sudo -u postgres psql -l | grep -w rmails | wc -l`.to_s.chomp
 # create roles and application database
   shell_manager.sh "sudo -u postgres psql << EOF
     CREATE USER postfix ENCRYPTED password '#{password}';
@@ -40,7 +40,7 @@ if 1 ==`sudo -u postgres psql -l | grep -w rmails | wc -l`
     CREATE ROLE rmails_app WITH USER postfix, dovecot LOGIN PASSWORD '#{password}';
     CREATE DATABASE rmails OWNER rmails_app;
   EOF", :quiet => true
-end
+#end
 
 # render rails database definition
 locals = {

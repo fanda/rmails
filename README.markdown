@@ -5,7 +5,7 @@ A Ruby on Rails application which automates an installation and initial configur
 
 For Debian based servers. CentOs, Fedora and Gentoo support will be added in near future.
 
-
+It is using fork of AutomateIt library [Automate-It](https://github.com/fanda/automateit).
 
 
 Requirements

@@ -85,6 +85,16 @@ edit :file => "#{etc_postfix}/main.cf" do
 end
 =end
 
+locals = {
+    :mailname  => lookup("postfix#mydomain")
+}
+render(
+    :file   => "#{dist}postfix/mailname.erb",
+    :to     => "/etc/mailname",
+    :mode   => 0660,
+    :locals => locals
+)
+
 #
 # Set DKIM
 #
