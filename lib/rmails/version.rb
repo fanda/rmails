@@ -1,4 +1,4 @@
 module Rmails
-  VERSION = "0.2.0"
-  RELEASE = "2013-05-16"
+  VERSION = "0.2.1"
+  RELEASE = "2013-05-17"
 end
