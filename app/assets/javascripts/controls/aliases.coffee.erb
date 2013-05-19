@@ -18,6 +18,12 @@ window.Aliases = can.Control({
       domain_name: @dname
     } ) )
 
+  show_errors: (form, errors) ->
+    $.each(errors, (k, a) ->
+      el = form.find('.virtual_alias_'+k).addClass('error')
+      el.find('.controls').append('<span class="help-block">'+a[0]+'</span>')
+    )
+
   "form reset": (el, ev) ->
     @refresh()
     @show_title('')
@@ -41,16 +47,23 @@ window.Aliases = can.Control({
 
   ".edit_alias submit": (el, ev) ->
     ev.preventDefault()
+    el.find('.error .help-block').remove()
+    el.find('.error').removeClass('error')
     values = el.formParams()
-    id = el.parents('tr').attr('id').replace('alias_', '')
-    item = @model[id]
-    item.attr(values['virtual_alias'])
+    index = el.parents('tr').attr('id').replace('alias_', '')
+    item = new Alias(values["virtual_alias"])
     if item.errors()
       item.alert()
       return
-    Alias.update(values, item, el.attr('action'))
-    @show_title('')
-    @refresh()
+    self = this
+    Alias.update(values, el.attr('action')+'/'+@model[index].id, (json) ->
+      if json["errors"]
+        self.show_errors(el, json["errors"])
+      else
+        self.model[index].attr(values['virtual_alias'])
+        self.show_title('')
+        self.refresh()
+    )
     return false
 
 
@@ -78,14 +91,30 @@ window.Aliases = can.Control({
     if item.errors()
       item.alert()
       return
-    Alias.create(values, @di, (json) ->
+    Alias.create(values, self.di, (json) ->
       if json["errors"]
-        alert(json["errors"])
+        self.show_errors(el, json["errors"])
       else
-        li.removeClass('new').attr('id', 'alias_'+json.id)
+        item.attr('id', json.id)
+        item.attr('virtual_domain_id', self.di)
         self.model.unshift(item)
         self.show_title('')
         self.refresh()
     )
+
+  ".rm-alias click": (el, ev) ->
+    ev.preventDefault()
+    if not confirm('Are You sure?')
+      return false
+    id = el.parents('tr').attr('id').replace('alias_', '')
+    self = this
+    Alias.destroy(@model[id], (json) ->
+      if json["errors"]
+        alert(json["errors"])
+      else
+        self.model.splice(id, 1)
+        self.refresh()
+    )
+    return false
 
 })

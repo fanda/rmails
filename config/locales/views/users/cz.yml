@@ -15,4 +15,5 @@ cz:
       password: Heslo
       password_confirmation: Potvrzení hesla
       create: Vytvořit
+      submit: Uložit
       reset: Storno

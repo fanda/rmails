@@ -95,6 +95,7 @@
         <%= item.destination %>
     %td.tar
       = link_to t(".edit"), edit_domain_alias_path('{domain_id}', '{id}'), :class => 'label edit-alias'
+      = link_to "&times;".html_safe, domain_alias_path('{domain_id}', '{id}'), :class => 'rm-alias', :title => t(".delete")
     :plain
         </tr>
       <% }) %>
@@ -120,6 +121,8 @@
         <%= item.name %>
     %td.tar
       = link_to t(".edit"), edit_domain_user_path('{domain_id}', '{id}'), :class => 'label edit-user'
+      = link_to "&times;".html_safe, domain_user_path('{domain_id}', '{id}'), :class => 'rm-user', :title => t(".delete")
+
     :plain
         </tr>
       <% }) %>

@@ -102,8 +102,11 @@ header
 
 #rmails
   .list .table
-    tr td *
-      display: inline-block
+    tr td
+      *
+        display: inline-block
+      .help-block
+        display: block !important
 
   .label
     display: inline !important
@@ -121,6 +124,8 @@ header
   .actions
     clear: both
     width: 100%
+  .control-group
+    vertical-align: top
 
 .aliases
   .control-group

@@ -1,12 +1,12 @@
 class UsersController < ApplicationController
 
-  before_filter :find_user, :only => [:update]
+  before_filter :find_user, :only => [:update, :destroy]
 
   def update
     if @user.change_data params[:virtual_user]
       render :json => {:id => @user.id}
     else
-      render :json => {:errors => @user.errors.to_json}
+      render :json => {:errors => @user.errors}
     end
   rescue
     render :json => {:errors => t('unknown_error')}
@@ -18,12 +18,18 @@ class UsersController < ApplicationController
     if @user.save
       render :json => {:id => @user.id}
     else
-      render :json => {:errors => @user.errors.to_json}
+      render :json => {:errors => @user.errors}
     end
   rescue
     render :json => {:errors => t('unknown_error')}
   end
 
+  def destroy
+    @user.destroy
+    render :json => {:id => nil}
+  rescue
+    render :json => {:errors => t('unknown_error')}
+  end
 
 protected
 

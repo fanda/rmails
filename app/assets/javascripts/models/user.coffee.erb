@@ -7,18 +7,20 @@ window.User = can.Model({
     url = unescape('<%= Rails.application.routes.url_helpers.domain_users_path("{domain_id}") %>').replace("{domain_id}", domain_id)
     return $.post(url, attrs, callback, "json")
 
-  update  : (attrs, user, url ) ->
+  update  : (attrs, url, callback) ->
     attrs["_method"] = "PUT"
     return $.ajax({
-      url: url + '/' + user.id
+      url: url
       type: 'POST'
       data: attrs
       dataType: 'json'
-      success: (json) ->
-        dbg(json)
+      success: callback
     })
 
-  destroy : ('DELETE ' + unescape('<%= Rails.application.routes.url_helpers.domain_user_path('{domain_id}', '{id}') %>'))
+  destroy : (item, callback) ->
+    url = unescape('<%= Rails.application.routes.url_helpers.domain_user_path('{domain_id}', '{id}') %>').replace("{domain_id}", item.virtual_domain_id).replace("{id}", item.id)
+    return $.post(url, {"_method":"DELETE"}, callback, "json")
+
 
   init: () ->
     @validatePresenceOf ['email']

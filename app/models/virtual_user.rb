@@ -8,16 +8,12 @@ class VirtualUser < ActiveRecord::Base
 
   attr_accessible :name, :email, :password, :password_confirmation
 
-  attr_accessor :password_confirmation
-
   before_validation :repair_email_format
 
   validates :email,
     :presence   => true,
     :uniqueness => true,
     :format     => { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i }
-  #validates :password,
-  #  :presence   => true
 
   validates :quota_kb,
     :numericality => true
@@ -26,13 +22,13 @@ class VirtualUser < ActiveRecord::Base
 
 
   def change_data(params)
-    success = if not params[:password].blank?
-      update_with_password(params)
+    attrs = params.symbolize_keys
+    if attrs[:password].blank?
+      attrs.delete(:password)
+      update_without_password(attrs)
     else
-      params.delete(:password)
-      update_without_password(params)
+      update_attributes(attrs)
     end
-    return success
   end
 
   def self.drop_domain_from_email_each(users)

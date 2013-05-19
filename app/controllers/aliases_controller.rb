@@ -1,12 +1,12 @@
 class AliasesController < ApplicationController
 
-  before_filter :find_alias, :only => [:update]
+  before_filter :find_alias, :only => [:update, :destroy]
 
   def update
     if @alias.update_attributes(params[:virtual_alias])
       render :json => {:id => @alias.id}
     else
-      render :json => {:errors => @alias.errors.to_json}
+      render :json => {:errors => @alias.errors}
     end
   rescue
     render :json => {:errors => t('unknown_error')}
@@ -18,11 +18,19 @@ class AliasesController < ApplicationController
     if @alias.save
       render :json => {:id => @alias.id}
     else
-      render :json => {:errors => @alias.errors.to_json}
+      render :json => {:errors => @alias.errors}
     end
   rescue
     render :json => {:errors => t('unknown_error')}
   end
+
+  def destroy
+    @alias.destroy
+    render :json => {:id => nil}
+  rescue
+    render :json => {:errors => t('unknown_error')}
+  end
+
 
 
 protected

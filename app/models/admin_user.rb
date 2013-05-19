@@ -8,6 +8,8 @@ class AdminUser < ActiveRecord::Base
 
   attr_accessible :name, :email, :password, :password_confirmation, :virtual_domain_ids
 
+  attr_accessor :password_confirmation
+
   validates :email,
     :presence   => true,
     :uniqueness => true,
@@ -42,13 +44,13 @@ class AdminUser < ActiveRecord::Base
 
 
   def change_data(params)
-    success = if not params[:password].blank?
-      update_with_password(params)
+    attrs = params.symbolize_keys
+    if attrs[:password].blank?
+      attrs.delete(:password)
+      update_without_password(attrs)
     else
-      params.delete(:password)
-      update_without_password(params)
+      update_with_password(attrs)
     end
-    return success
   end
 
 end

@@ -12,6 +12,7 @@ cz:
       source: Co
       destination: Kam
       create: Vytvořit
+      submit: Uložit
       reset: Storno
       source_hint: Jméno schránky nebo *
       dest_hint: Celé e-mailové adresy, každá na vlastní řádek

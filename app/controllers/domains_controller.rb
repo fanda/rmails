@@ -23,7 +23,7 @@ class DomainsController < ApplicationController
     if @domain.save
       render :json => {:id => @domain.id}
     else
-      render :json => {:errors => @domain.errors.to_json}
+      render :json => {:errors => @domain.errors}
     end
   end
 
@@ -32,7 +32,7 @@ class DomainsController < ApplicationController
     if @domain.update_attributes params[:virtual_domain]
       render :json => {:id => @domain.id}
     else
-      render :json => {:errors => @domain.errors.to_json}
+      render :json => {:errors => @domain.errors}
     end
   rescue
     render :status => 405

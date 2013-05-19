@@ -5,7 +5,6 @@ window.Users = can.Control({
     @di = opts.domain_id
     @dname = opts.domain_name
     @model = opts.items
-    @dname = opts.domain_name
     @refresh()
 
   show_title: (type) ->
@@ -13,11 +12,18 @@ window.Users = can.Control({
     type = (if type.length then '_' else '') + type
     $(@el).find('h4 .title' + type).show()
 
-  refresh: () ->
+  refresh: () -> # render fresh list of users
     $(@el).find('table').html( can.view( 'vusers_each_EJS', {
       items: @model
       domain_name: @dname
     } ) )
+
+  show_errors: (form, errors) ->
+    $.each(errors, (k, a) ->
+      el = form.find('.virtual_user_'+k).addClass('error')
+      el.find('.controls').append('<span class="help-block">'+a[0]+'</span>')
+    )
+
 
   "form reset": (el, ev) ->
     @refresh()
@@ -44,16 +50,23 @@ window.Users = can.Control({
 
   ".edit_user submit": (el, ev) ->
     ev.preventDefault()
+    el.find('.error .help-block').remove()
+    el.find('.error').removeClass('error')
     values = el.formParams()
-    id = el.parents('tr').attr('id').replace('user_', '')
-    item = @model[id]
-    item.attr(values['virtual_user'])
+    index = el.parents('tr').attr('id').replace('user_', '')
+    item = new User(values["virtual_user"])
     if item.errors()
       item.alert()
       return
-    User.update(values, item, el.attr('action'))
-    @show_title('')
-    @refresh()
+    self = this
+    User.update(values, el.attr('action')+'/'+@model[index].id, (json) ->
+      if json["errors"]
+        self.show_errors(el, json["errors"])
+      else
+        self.model[index].attr(values['virtual_user'])
+        self.show_title('')
+        self.refresh()
+    )
     return false
 
 
@@ -81,14 +94,30 @@ window.Users = can.Control({
     if item.errors()
       item.alert()
       return
-    User.create(values, @di, (json) ->
+    User.create(values, self.di, (json) ->
       if json["errors"]
-        alert(json["errors"])
+        self.show_errors(el, json["errors"])
       else
-        li.removeClass('new').attr('id', 'user_'+json.id)
+        item.attr('id', json.id)
+        item.attr('virtual_domain_id', self.di)
         self.model.unshift(item)
         self.show_title('')
         self.refresh()
     )
+
+  ".rm-user click": (el, ev) ->
+    ev.preventDefault()
+    if not confirm('Are You sure?')
+      return false
+    id = el.parents('tr').attr('id').replace('user_', '')
+    self = this
+    User.destroy(@model[id], (json) ->
+      if json["errors"]
+        alert(json["errors"])
+      else
+        self.model.splice(id, 1)
+        self.refresh()
+    )
+    return false
 
 })

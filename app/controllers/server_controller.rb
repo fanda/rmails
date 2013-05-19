@@ -12,7 +12,7 @@ class ServerController < ApplicationController
     if property.set_value(params[:value])
       render :json => {:result => 'success'}
     else
-      render :json => {:errors => property.errors.to_json}
+      render :json => {:errors => property.errors}
     end
   rescue
     render :json => {:errors => t('unknown_error')}

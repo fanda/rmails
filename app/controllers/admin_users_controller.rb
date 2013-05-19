@@ -23,7 +23,7 @@ class AdminUsersController < ApplicationController
       end
     else
       respond_to do |format|
-        format.json { render :json => {:errors => @admin.errors.to_json } }
+        format.json { render :json => {:errors => @admin.errors } }
         format.html {
           flash[:error] = t('first_admin_user_error')
           render :action => 'first'
@@ -38,7 +38,7 @@ class AdminUsersController < ApplicationController
       if @admin.change_data params
         render :json => {:id => @admin.id}
       else
-        render :json => {:errors => @admin.errors.to_json}
+        render :json => {:errors => @admin.errors}
       end
     else
       render :json => {:errors => t('not_authorized')}
