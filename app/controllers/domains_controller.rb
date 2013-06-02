@@ -21,7 +21,7 @@ class DomainsController < ApplicationController
   def create # JSON only
     @domain = current_admin_user.build_domain(params[:virtual_domain])
     if @domain.save
-      render :json => {:id => @domain.id}
+      render :json => {:domain => @domain}
     else
       render :json => {:errors => @domain.errors}
     end

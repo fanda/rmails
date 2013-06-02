@@ -1,10 +1,12 @@
 cz:
   aliases:
+    templates:
+      delete: Odstranit
+      edit: Upravit
     index:
       title: Přesměrování
       title_new: Vytvořit nové přesměrování
       title_edit: Upravit přesměrování
-      edit: Upravit
       delete: Odstranit
       create: Přidat přesměrování
       confirm: Opravdu chcete odstranit toto přesměrování?

@@ -8,8 +8,8 @@ cz:
       nomanage: Skrýt
       create: Přidat doménu
       confirm: Opravdu chcete doménu odstranit?
-      errors: Byly objeveny chybné vstupní hodnoty.
     form:
       name: Název domény
       create: Vytvořit doménu
       reset: Storno
+

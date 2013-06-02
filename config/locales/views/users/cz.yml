@@ -4,8 +4,6 @@ cz:
       title: Schránky
       title_new: Vytvořit novou schránku
       title_edit: Upravit schránku
-      edit: Upravit
-      delete: Odstranit
       create: Přidat shcránku
       confirm: Opravdu chcete schránku odstranit?
 
@@ -16,4 +14,12 @@ cz:
       password_confirmation: Potvrzení hesla
       create: Vytvořit
       submit: Uložit
+      no_limit: 0 znamená neomezeno
       reset: Storno
+      quota_kb: Velikost schránky (B)
+      quota_messages: Limit počtu zpráv
+
+    templates:
+      delete: Odstranit
+      edit: Upravit
+

@@ -1,1 +1,23 @@
 en:
+  users:
+    index:
+      title: Users/Mailboxes
+      manage: Show
+      nomanage: Hide
+      create: Add new
+      confirm: This will be deleted. Are You sure?
+      errors: There were some input errors.
+    form:
+      name: Name
+      email: Email
+      password: Password
+      create: Create
+      submit: Save
+      reset: Cancel
+      no_limit: 0 is unlimited
+      quota_kb: Mailbox size quota
+      quota_messages: Messages count qouta
+    templates:
+      delete: Delete
+      edit: Edit
+

@@ -23,6 +23,7 @@ cz:
       certificates: Certifikáty
 
     status:
+      warning: Varování
       save_info: Provedení změn na serveru
       submit_button: Aplikovat změny do nastavení serveru a restartovat služby
       unsaved_warning: Systém našel neuplatněné změny v nastavení. Oranžově označené nastavení má změněnou, ale neuloženou hodnotu.

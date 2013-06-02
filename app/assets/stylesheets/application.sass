@@ -91,8 +91,7 @@ header
     display: inline-block
     background: transparent
     border: none
-    *
-      display: inline
+
   //.actions
     float: right
   //.inputs
@@ -103,15 +102,12 @@ header
 #rmails
   .list .table
     tr td
-      *
+      .aliases
         display: inline-block
       .help-block
         display: block !important
 
-  .label
-    display: inline !important
-
-.aliases, .users
+.aliases
   margin: 0
   label
     display: block !important
@@ -126,9 +122,6 @@ header
     width: 100%
   .control-group
     vertical-align: top
-
-.aliases
-  .control-group
     float: left
   input.string, textarea
     display: block !important
@@ -144,9 +137,8 @@ header
       padding: 3px
 
 .users
-  input.string, input.password
-    width: 254px !important
-    display: inline-block !important
+
+
 
 #system
   /*.control-label

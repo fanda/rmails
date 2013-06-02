@@ -13,3 +13,4 @@ en:
       name: Název domény
       create: Vytvořit doménu
       reset: Storno
+      no_limit: 0 is unlimited

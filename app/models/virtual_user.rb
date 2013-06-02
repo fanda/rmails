@@ -1,12 +1,12 @@
 class VirtualUser < ActiveRecord::Base
 
   devise :database_authenticatable, :encryptable,
-         :recoverable, :rememberable, :trackable, :validatable,
+         :recoverable, :rememberable, :validatable,
          :encryptor => :dovecot_ssha512, :stretches => 1
 
   belongs_to :virtual_domain
 
-  attr_accessible :name, :email, :password, :password_confirmation
+  attr_accessible :name, :email, :password, :quota_kb, :quota_messages
 
   before_validation :repair_email_format
 

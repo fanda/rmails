@@ -1,0 +1,71 @@
+%script#domain_form_EJS{"type" => "text/ejs"}
+  %li.empty
+    .item
+      .iconat @
+      = render :partial => 'form', :locals => { :domain => domain_ejs_object }
+      .out
+
+%script#domain_edit_EJS{"type" => "text/ejs"}
+  .iconat @
+  = render :partial => 'form', :locals => { :domain => domain_ejs_object }
+  .out
+
+%script#domain_item_EJS{"type" => "text/ejs"}
+  .iconat @
+  .btn-group
+    :plain
+      <a href="#!edit/<%= item.attr('id') %>" class="label edit">
+    = t("domains.index.edit")
+    :plain
+      </a>
+    :plain
+      <a href="#!delete/<%= item.attr('id') %>" class="label label-warning rm" data-msg="#{t("domains.index.confirm")}">
+    = t("domains.index.delete")
+    :plain
+      </a>
+
+  .item-content
+    :plain
+      <a href="#!show/<%= item.attr('id') %>" class="item-label">
+        <%= item.attr('name') %>
+      </a>
+    :plain
+      <a href="#!show/<%= item.attr('id') %>" class="label label-info manage">
+    = t("domains.index.manage")
+    :plain
+      </a>
+
+    :plain
+      <a href="#!hide/<%= item.attr('id') %>" class="label dn nomanage">
+    = t("domains.index.nomanage")
+    :plain
+      </a>
+
+%script#errors_EJS{"type" => "text/ejs"}
+  .errors
+    %h6= t('domains.index.errors')
+    :plain
+      <% for (attr in errors) { %>
+        <% list (errors[attr], function(error) { %>
+          <p><%= error %></p>
+        <% }) %>
+      <% } %>
+
+%script#manage_area_EJS{"type" => "text/ejs"}
+  .item-content.out.row-fluid
+    .span5.users
+      %h4
+        %span.title=         t('users.index.title')
+        %span.dn.title_new=  t('users.index.title_new')
+        %span.dn.title_edit= t('users.index.title_edit')
+      .label-info.label.new-user=t 'users.form.create'
+      %table.table.table-condensed
+    .span5.aliases
+      %h4
+        %span.title=         t('aliases.index.title')
+        %span.dn.title_new=  t('aliases.index.title_new')
+        %span.dn.title_edit= t('aliases.index.title_edit')
+      .label-info.label.new-alias=t 'aliases.form.create'
+      %table.table.table-condensed
+
+

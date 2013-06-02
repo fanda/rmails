@@ -12,4 +12,10 @@ class VirtualDomain < ActiveRecord::Base
 
   default_scope order('id DESC').includes([:virtual_users, :virtual_aliases])
 
+  def as_json(opt={})
+    super opt.merge({
+            :include => [:virtual_users, :virtual_aliases]
+         })
+  end
+
 end

@@ -6,10 +6,8 @@
     $(document).ready(function() { new window.Domains('#content', {}); });
 
 
-= link_to new_domain_path, :class => 'add-domain btn btn-large btn-inverse' do
+= link_to '#!new', :class => 'add-domain btn btn-large btn-inverse' do
   %span= t '.create'
-= link_to '#', :class => 'rm-domain btn btn-large btn-danger dn' do
-  %span= t '.reset'
 
 %ul#domains.list
   - @domains.each do |domain|
@@ -17,120 +15,17 @@
       .item
         .iconat @
         .btn-group
-          = link_to t(".delete"), domain_path(domain), :method => :delete, :confirm => t(".confirm"), :class => 'label label-warning delete'
+          = link_to t(".edit"), "#!edit/#{domain.id}", :class => 'label edit'
+          = link_to t(".delete"), "#!delete/#{domain.id}", :'data-msg' => t(".confirm"), :class => 'label label-warning rm'
         .item-content
-          = link_to domain.name, domain_path(domain), :class => 'item-label'
-          -#= link_to t(".edit"), edit_domain_path(domain), :class => 'label edit'
-          = link_to t(".manage"), domain_path(domain), :class => 'label label-info manage', :'data-inverse' => t(".nomanage")
+          = link_to domain.name, "#!show/#{domain.id}", :class => 'item-label'
+          = link_to t(".manage"), "#!show/#{domain.id}", :class => 'label label-info manage'
+          = link_to t(".nomanage"), "#!hide/#{domain.id}", :class => 'label dn nomanage'
 
 
 #domains_JSON.dn= @domains.to_json(:include => [:virtual_users, :virtual_aliases])
 
-
-
 #EJS.dn
-  %script#domain_form_EJS{"type" => "text/ejs"}
-    %li.empty
-      .item
-        .iconat @
-        = render :partial => 'form', :locals => { :domain => domain_ejs_object }
-        .out
-
-  %script#domain_edit_EJS{"type" => "text/ejs"}
-    .iconat @
-    = render :partial => 'form', :locals => { :domain => domain_ejs_object }
-    .out
-
-  %script#domain_item_EJS{"type" => "text/ejs"}
-    .iconat @
-    .btn-group
-      = link_to t(".delete"), domain_path('{id}'), :method => :delete, :confirm => t(".confirm"), :class => 'label label-warning delete'
-    .item-content
-      %a{:href => "", :class => "item-label"}
-        :plain
-          <%= item.attr('name') %>
-      = link_to t(".manage"), domain_path('{id}'), :class => 'label label-info manage', :'data-inverse' => t(".nomanage")
-
-  %script#errors_EJS{"type" => "text/ejs"}
-    .errors
-      %h6= t('.errors')
-      :plain
-        <% for (attr in errors) { %>
-          <% list (errors[attr], function(error) { %>
-            <p><%= error %></p>
-          <% }) %>
-        <% } %>
-
-  %script#manage_area_EJS{"type" => "text/ejs"}
-    .item-content.out.row-fluid
-      .span5.users
-        %h4
-          %span.title=         t('users.index.title')
-          %span.dn.title_new=  t('users.index.title_new')
-          %span.dn.title_edit= t('users.index.title_edit')
-        .label-info.label.new-user=t 'users.form.create'
-        %table.table.table-condensed
-      .span5.aliases
-        %h4
-          %span.title=         t('aliases.index.title')
-          %span.dn.title_new=  t('aliases.index.title_new')
-          %span.dn.title_edit= t('aliases.index.title_edit')
-        .label-info.label.new-alias=t 'aliases.form.create'
-        %table.table.table-condensed
-
-  %script#aliass_each_EJS{"type" => "text/ejs"}
-    :plain
-      <% list (items, function(item, index) { %>
-        <tr id="alias_<%= index %>">
-    %td.tar
-      :plain
-        <%= item.source %>
-    %td
-      %b
-        :plain
-          @<%= domain_name %>
-      %i.icon-hand-right
-    %td
-      :plain
-        <%= item.destination %>
-    %td.tar
-      = link_to t(".edit"), edit_domain_alias_path('{domain_id}', '{id}'), :class => 'label edit-alias'
-      = link_to "&times;".html_safe, domain_alias_path('{domain_id}', '{id}'), :class => 'rm-alias', :title => t(".delete")
-    :plain
-        </tr>
-      <% }) %>
-
-  %script#aliass_tabr_EJS{"type" => "text/ejs"}
-    %tr.new
-
-  %script#aliass_form_EJS{"type" => "text/ejs"}
-    %td{:colspan => "4"}
-      = render :partial => '/aliases/form', :locals => { :virtual_alias => alias_ejs_object }
-
-  %script#vusers_each_EJS{"type" => "text/ejs"}
-    :plain
-      <% list (items, function(item, index) { %>
-        <tr id="user_<%= index %>">
-    %td
-      %i.icon-inbox
-      :plain
-        <%= item.email %>@<%= domain_name %>
-    %td
-      %i.icon-user
-      :plain
-        <%= item.name %>
-    %td.tar
-      = link_to t(".edit"), edit_domain_user_path('{domain_id}', '{id}'), :class => 'label edit-user'
-      = link_to "&times;".html_safe, domain_user_path('{domain_id}', '{id}'), :class => 'rm-user', :title => t(".delete")
-
-    :plain
-        </tr>
-      <% }) %>
-
-  %script#vusers_tabr_EJS{"type" => "text/ejs"}
-    %tr.new
-
-  %script#vusers_form_EJS{"type" => "text/ejs"}
-    %td{:colspan => "4"}
-      = render :partial => '/users/form', :locals => { :virtual_user => user_ejs_object }
-
+  = render :partial => '/domains/templates'
+  = render :partial => '/aliases/templates'
+  = render :partial => '/users/templates'

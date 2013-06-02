@@ -1,9 +1,11 @@
-= simple_form_for virtual_user, :url => domain_users_path(@domain||'{domain_id}'), :method => :post do |f|
+= simple_form_for virtual_user, :url => domain_users_path(@domain||'{domain_id}'), :method => :post, :html => { :class => 'form-horizontal'} do |f|
 
   = f.input :name,     :label => t('.name')
   = f.input :email,     :label => t('.email')
   = f.input :password,  :label => t('.password')
-  = f.input :password_confirmation,  :label => t('.password_confirmation')
+
+  = f.input :quota_kb,  :label => t('.quota_kb'), :hint => t('.no_limit')
+  = f.input :quota_messages,  :label => t('.quota_messages'), :hint => t('.no_limit')
 
   .actions
     = f.button :button, t('.submit'), :type => 'submit', :class => 'btn-primary right'

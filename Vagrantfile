@@ -21,7 +21,7 @@ Vagrant::Config.run do |config|
     c.vm.box = "debian32"
     c.vm.forward_port 80, 8091
     c.vm.forward_port 3000, 4001
-    c.vm.forward_port 25, 1125
+    c.vm.forward_port 25,  1125
     c.vm.forward_port 587, 11587
     c.vm.forward_port 110, 11110
     c.vm.forward_port 995, 11995

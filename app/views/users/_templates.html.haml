@@ -1,0 +1,27 @@
+%script#vusers_each_EJS{"type" => "text/ejs"}
+  :plain
+    <% list (items, function(item, index) { %>
+      <tr id="user_<%= index %>">
+  %td
+    %i.icon-inbox
+    :plain
+      <%= item.email %>@<%= domain_name %>
+  %td
+    %i.icon-user
+    :plain
+      <%= item.name %>
+  %td.tar
+    = link_to t(".edit"), edit_domain_user_path('{domain_id}', '{id}'), :class => 'label edit-user'
+    = link_to "&times;".html_safe, domain_user_path('{domain_id}', '{id}'), :class => 'rm-user', :title => t(".delete")
+
+  :plain
+      </tr>
+    <% }) %>
+
+%script#vusers_tabr_EJS{"type" => "text/ejs"}
+  %tr.new
+
+%script#vusers_form_EJS{"type" => "text/ejs"}
+  %td{:colspan => "4"}
+    = render :partial => '/users/form', :locals => { :virtual_user => user_ejs_object }
+

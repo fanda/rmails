@@ -1,0 +1,29 @@
+%script#aliass_each_EJS{"type" => "text/ejs"}
+  :plain
+    <% list (items, function(item, index) { %>
+      <tr id="alias_<%= index %>">
+  %td.tar
+    :plain
+      <%= item.source %>
+  %td
+    %b
+      :plain
+        @<%= domain_name %>
+    %i.icon-hand-right
+  %td
+    :plain
+      <%= item.destination %>
+  %td.tar
+    = link_to t(".edit"), edit_domain_alias_path('{domain_id}', '{id}'), :class => 'label edit-alias'
+    = link_to "&times;".html_safe, domain_alias_path('{domain_id}', '{id}'), :class => 'rm-alias', :title => t(".delete")
+  :plain
+      </tr>
+    <% }) %>
+
+%script#aliass_tabr_EJS{"type" => "text/ejs"}
+  %tr.new
+
+%script#aliass_form_EJS{"type" => "text/ejs"}
+  %td{:colspan => "4"}
+    = render :partial => '/aliases/form', :locals => { :virtual_alias => alias_ejs_object }
+

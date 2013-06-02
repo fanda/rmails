@@ -1,1 +1,21 @@
 en:
+  aliases:
+    templates:
+      delete: Delete
+      edit: Edit
+    index:
+      title: Forwarding
+      title_new: Creating forwarding
+      title_edit: Editting forwarding
+      delete: Delete
+      create: Add new
+      confirm: This will be deleted. Are You sure?
+      errors: There were some input errors.
+    form:
+      source: What
+      destination: Where
+      create: Create
+      submit: Save
+      reset: Cancel
+      source_hint: Mailbox name or *
+      dest_hint: Separate emails with the Enter key

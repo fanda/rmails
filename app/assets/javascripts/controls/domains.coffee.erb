@@ -1,9 +1,34 @@
+can.route( ':action/:id' )
+can.route( ':action' )
+
+
 window.Domains = can.Control({
 
   init: (el, opt) ->
     @opt = opt
     @model = Domain.models JSON.parse($('#domains_JSON').text())
     return
+
+  render_manage_area: (li, item) ->
+    li.addClass('open').find('.item').append( can.view( 'manage_area_EJS' ) )
+    users   = new Users(li.find('.item .users'), {
+      items: item["virtual_users"]
+      domain_id: item.id
+      domain_name: item.name
+    })
+    aliases = new Aliases(li.find('.item .aliases'), {
+      items: item["virtual_aliases"]
+      domain_id: item.id
+      domain_name: item.name
+    })
+
+  close_manage_area: (li) ->
+    li.find('.nomanage').hide()
+    li.find('.manage').show()
+    li.removeClass('open')
+    it = li.find('.item .item-content:last')
+    if it.hasClass('out')
+      it.remove()
 
   "form reset": (el, ev) ->
     li = el.parents('li')
@@ -16,22 +41,12 @@ window.Domains = can.Control({
       li.find('.item').html(
         can.view( 'domain_item_EJS', { item: item } )
       )
-
-  ".add-domain click": (el, ev) ->
-    ev.preventDefault()
-    $('#domains .empty').remove()
-    $('#domains').prepend(can.view( 'domain_form_EJS', { item: new Domain } ))
-    $('.add-domain').toggle()
-
-  ".rm-domain click": (el, ev) ->
-    ev.preventDefault()
-    $('#domains .empty').remove()
-    $('.add-domain').toggle()
+    can.route.attr('action', '' )
 
   "#new_virtual_domain submit": (el, ev) ->
     ev.preventDefault()
-    self = this
     values = el.formParams()
+    self = this
     item = new Domain(values["virtual_domain"])
     if item.errors() # validation error
       item.alert()
@@ -45,71 +60,49 @@ window.Domains = can.Control({
         )
       else
         # post-creation hook
-        item.attr('id', json.id)
-        li.removeClass('empty').attr('id', 'domain_'+json.id)
-        # show links to edit and remove with right id
-        li.find('.item').html(
-          can.view( 'domain_item_EJS', { item: item } )
-        ).find('.btn-group a').attr('href', (i, v) ->
-          return unescape(v).replace(/{id}/g, json.id)
+        item.attr(json.domain)
+        li.removeClass('empty').attr('id', 'domain_'+item.attr('id'))
+    )
+    # show links to edit and remove with right id
+    li.find('.item').html( can.view( 'domain_item_EJS', { item: item } ) )
+    @model.unshift(item)
+    $('.add-domain').toggle()
+
+  ":action route": (a) ->
+    # action NEW
+    if a["action"] == 'new'
+      $('#domains .empty').remove()
+      $('#domains').prepend(can.view( 'domain_form_EJS', { item: new Domain } ))
+      $('.add-domain').toggle()
+
+  ":action/:id route": (params) ->
+    li = $("#domain_" + params["id"])
+    item = @model.with_id(parseInt(params["id"]))
+    self = this
+    # action EDIT
+    if params["action"] == 'edit'
+      li.find('.item').html(can.view( 'domain_edit_EJS', { item: item } ))
+      li.addClass('inedit')
+    # action DELETE
+    else if params["action"] == 'delete'
+      if confirm(li.find('.rm').data('msg'))
+        Domain.destroy(item, (json) ->
+          if json["errors"]
+            alert(json["errors"])
+          else
+            # delete from local Model.list
+            self.model.splice(self.model.indexOf(item), 1)
+            li.remove()
         )
-        self.model.unshift(item)
-        $('.add-domain').toggle()
-    )
-
-
-
-  ".edit click": (el, ev) ->
-    ev.preventDefault()
-    li = el.parents('li')
-    id = li.attr('id').replace('domain_','')
-    item = @model.with_id(parseInt(id))
-    li.find('.item').html(can.view( 'domain_edit_EJS', { item: item } ))
-    li.addClass('inedit')
-    return false
-
-  ".delete click": (el, ev) ->
-    ev.preventDefault()
-    if not confirm('Are You sure?')
-      return false
-    li = el.parents('li')
-    id = li.attr('id').replace('domain_','')
-    item = @model.with_id(parseInt(id))
-    @model.splice(@model.indexOf(item), 1)
-    item.destroy()
-    li.remove()
-    return false
-
-  ".manage click": (el, ev) ->
-    ev.preventDefault()
-    li = el.parents('li')
-    txt = el.text()
-    el.text(el.data('inverse'))
-    el.data('inverse', txt)
-    if el.hasClass('label-info')
-      el.removeClass('label-info')
-    else
-      el.addClass('label-info')
-      li.find('.item-content:last').remove()
-      return false
-
-    id = li.attr('id').replace('domain_','')
-    item = @model.with_id(parseInt(id))
-    if li.find('.item .item-content:last').hasClass('out')
-      return false
-    li.find('.item').append(
-      can.view( 'manage_area_EJS' )
-    )
-    users   = new Users(li.find('.item .users'), {
-      items: item["virtual_users"]
-      domain_id: id
-      domain_name: item.name
-    })
-    aliases = new Aliases(li.find('.item .aliases'), {
-      items: item["virtual_aliases"]
-      domain_id: id
-      domain_name: item.name
-    })
-    return false
+        can.route.attr({action:''})
+    # action SHOW
+    else if params["action"] == 'show'
+      li.find('.manage').hide()
+      li.find('.nomanage').show()
+      @close_manage_area($('.open'))
+      @render_manage_area(li, item)
+    # action HIDE
+    else if params["action"] == 'hide'
+      @close_manage_area(li)
 
 })

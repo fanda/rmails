@@ -11,7 +11,9 @@ window.Domain = can.Model({
     url = unescape('<%= Rails.application.routes.url_helpers.domain_path('{id}') %>').replace('{id}', domain.id)
     return $.post(url, attrs, null, "json")
 
-  destroy : ('DELETE ' + unescape('<%= Rails.application.routes.url_helpers.domain_path('{id}') %>'))
+  destroy : (item, callback) ->
+    url = unescape('<%= Rails.application.routes.url_helpers.domain_path('{id}') %>').replace("{id}", item.id)
+    return $.post(url, {"_method":"DELETE"}, callback, "json")
 
 
   attributes: {
@@ -20,8 +22,7 @@ window.Domain = can.Model({
   },
 
   init: () ->
-    @validatePresenceOf ['name']
-    #@validateFormatOf   ['name'], /\A(?:[-a-z0-9]+\.)+[a-z]{2,}\Z/i
+    @validateFormatOf   ['name'], /^(?:[-a-z0-9]+\.)+[a-z]{2,}$/i
 
 }, {})
 
