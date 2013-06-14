@@ -1,20 +1,20 @@
 en:
   server:
     key:
-      disable_plaintext_auth:
-      auth_username_chars:
-      auth_worker_max_count:
-      auth_verbose:
-      mail_cache_min_mail_count:
-      imap_login__listener__port:
-      imaps_login__listener__port:
-      pop3_login_listener_port:
-      pop3s_login__listener__port:
-      imap__process_limit:
-      pop3__process_limit:
-      quota_full_tempfail:
-      rejection_subject:
-      rejection_reason:
-      storage_size:
-      storage_trash:
-      storage_spam:
+      disable_plaintext_auth: Disable authentication without encryption
+      auth_username_chars: Allowed characters in a user's name
+      auth_worker_max_count: Maximum number oflogin process
+      auth_verbose: Detailed loging of authentication
+      mail_cache_min_mail_count: Minimum number of emails before updating the cache
+      imap_login__listener__port: IMAP port
+      imaps_login__listener__port: IMAPs port
+      pop3_login_listener_port: POP3 port
+      pop3s_login__listener__port: POP3s port
+      imap__process_limit: Maximum number of connected IMAP clients
+      pop3__process_limit: Maximum number of connected POP3 clients
+      quota_full_tempfail: Notification method to a full mailbox
+      rejection_subject: Subject of rejection
+      rejection_reason: Reason for rejection
+      storage_size: Mailbox size
+      storage_trash: Size bin
+      storage_spam: Size SPAM

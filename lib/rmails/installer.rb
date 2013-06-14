@@ -7,9 +7,10 @@ end
 
 module Rmails
   class Installer
-    def initialize
-      @passwords = []
-      @interpreter = AutomateIt.new(:project => "system")
+    def initialize(params={})
+      @passwords    = params[:passwords]||[]
+      @clear        = params[:clear]
+      @interpreter  = AutomateIt.new(:project => "system")
       @interpreter.include_in(self)
       @interpreter.set :rake_task, Rake::Task
       @interpreter.set :rails_root, Rails.root
@@ -21,6 +22,11 @@ module Rmails
       Bundler.with_clean_env do
         @interpreter.shell_manager.sh("bundle install --without development assets")
       end
+      if @clear
+        puts '!! Going to TRUNCATE database'
+      else
+        @interpreter.shell_manager.sh("rake db:data:dump")
+      end
       @interpreter.invoke '02_setup_database'
       @interpreter.invoke '03_setup_postfix'
       @interpreter.invoke '04_setup_dovecot'
@@ -30,6 +36,9 @@ module Rmails
       @interpreter.invoke '08_setup_spamassassin'
       @interpreter.invoke '09_setup_awstats'
       @interpreter.invoke 'XX_start_services'
+      unless @clear
+        @interpreter.shell_manager.sh("rake db:data:load")
+      end
     end
   end
 end

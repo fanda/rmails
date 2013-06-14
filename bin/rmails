@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-#/ Usage: rmails action
+#/ Usage: rmails action [options]
 #/
 #/ Actions:
 #/    --install
@@ -11,7 +11,10 @@
 #/    --stop-app
 #/        Stops server of configuration app.
 #/        You may have to be root to run this.
-
+#/ Options:
+#/    --clear
+#/        Truncate data in database.
+#/
 
 $stderr.sync = true
 
@@ -24,6 +27,8 @@ require 'rmails/runner'
 install = false
 start   = false
 stop    = false
+clear   = false
+
 
 # parse arguments
 file = __FILE__
@@ -31,22 +36,26 @@ ARGV.options do |opts|
   opts.on("--install")                 { |install| }
   opts.on("--start-app")               { |start|   }
   opts.on("--stop-app")                { |stop|    }
+  opts.on("--clear")                   { |clear|    }
   opts.on_tail("-h", "--help")         { exec "grep ^#/<'#{file}'|cut -c4-" }
   opts.parse!
 end
 
 
-if not(install or start or stop) or(start and stop)
+if (start and stop) or
+   (install and (start or stop)) or
+   (not install and not start and not stop)
   exec "grep ^#/<'#{file}'|cut -c4-"
+end # bug that helps to have better condition
 
 if install
-  setup = Rmails::Installer.new
+  puts install
+  setup = Rmails::Installer.new({:clear => clear})
   setup.run
 
 elsif start
   app = Rmails::Runner.new
   app.start
-end
 
 elsif stop
   app = Rmails::Runner.new

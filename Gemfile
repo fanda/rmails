@@ -7,6 +7,7 @@ gem 'devise'
 gem 'devise-encryptable'
 gem 'thin'
 gem 'pg'
+gem 'yaml_db'
 
 gem 'automate-it', :require => 'automateit'
 
