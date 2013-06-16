@@ -6,6 +6,7 @@ require File.expand_path('../config/application', __FILE__)
 Rmails::Application.load_tasks
 
 require "rmails/installer"
+require "rmails/publisher"
 
 namespace :rmails do
 

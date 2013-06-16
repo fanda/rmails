@@ -8,29 +8,31 @@ end
 module Rmails
   class Publisher
     def initialize(params={})
-      @interpreter  = AutomateIt.new(:project => "system")
+      @interpreter  = ::AutomateIt.new(:project => "system")
       @interpreter.include_in(self)
     end
 
     def run
       # prepare pre-install Gemfile
-      @interpreter.render :file => "#{dist}rmails/Gemfile.1", :to => "#{Rails.root}/Gemfile"
+      @interpreter.render :file => "#{dist}rmails/Gemfile.1", :to => "#{Rails.root}/Gemfile", :backup => false
       Bundler.with_clean_env do
         @interpreter.shell_manager.sh("bundle install --without development assets")
       end
 
       # increase version number
       versions = []
-      edit :file => "#{Rails.root}/lib/rmails/version.rb" do
+      edit :file => "#{Rails.root}/lib/rmails/version.rb", :backup => false do
         replace /^\s*RELEASE.*$/, "  RELEASE = '#{Time.now.strftime('%Y-%m-%d')}'"
         manipulate do |content|
-          content ~= /VERSION\s*=\s*"|'(.*)"|'/
-          versions = $1.split('.')
+          content =~ /^\s*VERSION\s*=\s*('|")(.*)("|').*$/
+          versions = $2.split('.')
           versions[2] = (versions[2].to_i + 1).to_s
-          content.sub /^\s*VERSION.*$/, "  VERSION = '#{versions.join('.')}'"
+          content.gsub /^\s*VERSION.*$/, "  VERSION = '#{versions.join('.')}'"
+        end
+        manipulate do |content|
+          puts content
         end
       end
-
 
       # publish on Rubygems and Github
       @interpreter.shell_manager.sh("gem build rmails.gemspec")
@@ -41,7 +43,7 @@ module Rmails
 
 
       # prepare post-install/devel Gemfile
-      @interpreter.render :file => "#{dist}rmails/Gemfile.2", :to => "#{Rails.root}/Gemfile"
+      @interpreter.render :file => "#{dist}rmails/Gemfile.2", :to => "#{Rails.root}/Gemfile", :backup => false
       Bundler.with_clean_env do
         @interpreter.shell_manager.sh("bundle install")
       end
