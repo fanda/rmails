@@ -2,13 +2,13 @@ require File.expand_path('../lib/rmails/version', __FILE__)
 
 Gem::Specification.new do |s|
   s.name               = "rmails"
-  s.version            = Rmails::VERSION
+  s.version            = ::Rmails::VERSION
   s.default_executable = "rmails"
   s.license            = 'MIT'
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pavel Novotny"]
-  s.date = Rmails::RELEASE
+  s.date = ::Rmails::RELEASE
   s.description = %q{Setup for e-mail server and its admin application}
   s.email = %q{fandisek@gmail.com}
   s.homepage = %q{https://github.com/fanda/rmails}

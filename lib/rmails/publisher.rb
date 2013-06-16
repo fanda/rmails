@@ -24,13 +24,10 @@ module Rmails
       edit :file => "#{Rails.root}/lib/rmails/version.rb", :backup => false do
         replace /^\s*RELEASE.*$/, "  RELEASE = '#{Time.now.strftime('%Y-%m-%d')}'"
         manipulate do |content|
-          content =~ /^\s*VERSION\s*=\s*('|")(.*)("|').*$/
-          versions = $2.split('.')
+          content =~ /^\s*VERSION\s*=\s*['"](.*)['"].*$/
+          versions = $1.split('.')
           versions[2] = (versions[2].to_i + 1).to_s
           content.gsub /^\s*VERSION.*$/, "  VERSION = '#{versions.join('.')}'"
-        end
-        manipulate do |content|
-          puts content
         end
       end
 
