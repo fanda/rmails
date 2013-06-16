@@ -32,9 +32,9 @@
     :plain
       <a href="#!show/<%= item.attr('id') %>" class="label label-info manage">
     = t("domains.index.manage")
+
     :plain
       </a>
-
     :plain
       <a href="#!hide/<%= item.attr('id') %>" class="label dn nomanage">
     = t("domains.index.nomanage")
@@ -53,19 +53,25 @@
 
 %script#manage_area_EJS{"type" => "text/ejs"}
   .item-content.out.row-fluid
+    .span10
+      %h4
+        %span.title=         t('dkim.title')
+        .label-info.label.inline.new-user=t 'dkim.show_key'
+      %pre
+        = `cat /etc/ssl/dkim/default.txt`
     .span5.users
       %h4
         %span.title=         t('users.index.title')
         %span.dn.title_new=  t('users.index.title_new')
         %span.dn.title_edit= t('users.index.title_edit')
-      .label-info.label.new-user=t 'users.form.create'
+        .label-info.label.inline.new-user=t 'users.form.create'
       %table.table.table-condensed
     .span5.aliases
       %h4
         %span.title=         t('aliases.index.title')
         %span.dn.title_new=  t('aliases.index.title_new')
         %span.dn.title_edit= t('aliases.index.title_edit')
-      .label-info.label.new-alias=t 'aliases.form.create'
+        .label-info.label.inline.new-alias=t 'aliases.form.create'
       %table.table.table-condensed
 
 

@@ -7,10 +7,19 @@ Rmails::Application.load_tasks
 
 require "rmails/installer"
 
-namespace :system do
+namespace :rmails do
+
   desc "Prepare server by installing required software"
   task :install do
     setup = Rmails::Installer.new
     setup.run
   end
+
+
+  desc "Task for developer. Increase version and distribute application on Rubygems and Github"
+  task :publish do
+    setup = Rmails::Publisher.new
+    setup.run
+  end
+
 end

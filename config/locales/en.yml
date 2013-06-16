@@ -1,2 +1,73 @@
 en:
   unknown_error: Unknown error appeared.
+  navigation:
+    domains: Domény
+    server_settings: Nastavení systému
+    admins: Správci systému
+    statistics: Statistiky
+    help: Nápověda
+  update: Změnit
+  loggedin: "Přihlášen:"
+  logout: Odhlásit
+  alert:
+    domain: Doména nemá vyplněné jméno.
+    alias: Nejsou vyplněny povinné údaje.
+    user: Nejsou vyplněny povinné údaje.
+
+  activerecord:
+    attributes:
+      admin_user:
+        email: E-mail
+        name: Jméno
+        password: Heslo
+        password_confirmation: Potvrzení hesla
+        remember_me: Pamatovat si mne
+      virtual_domain:
+        name: Název domény
+      virtual_user:
+        name: Jméno
+        email: Email
+        password: Heslo
+        password_confirmation: Potvrzení hesla
+        remember_me: Pamatovat si mne
+      virtual_alias:
+        source: Co
+        destination: Kam
+      property:
+        key: Klíč
+        value: Hodnota
+
+    errors:
+      messages:
+        record_invalid: Uvedená data nejsou v pořádku.
+      models:
+        admin_user:
+          attributes:
+            password:
+              confirmation: Hesla nejsou stejná.
+              too_short: Heslo je příliš krátké.
+              blank: Heslo musí být vyplněno.
+            email:
+              blank: E-mail musí být vyplněn.
+              invalid: E-mail má špatný formát.
+        virtual_user:
+          attributes:
+            password:
+              confirmation: Hesla nejsou stejná.
+              too_short: Heslo je příliš krátké.
+              blank: Heslo musí být vyplněno.
+            email:
+              blank: E-mail musí být vyplněn.
+              invalid: E-mail má špatný formát.
+              taken: E-mail je již evidován.
+        virtual_alias:
+          attributes:
+            source:
+              blank: Musí být zadáno, co přesměrovat
+            destination:
+              blank: Musí být zadáno, kam přesměrovat
+        virtual_domain:
+          attributes:
+            name:
+              blank: Název domény musí být vyplněn.
+              invalid: "Název domény má špatný formát. Správně např.: example.co
