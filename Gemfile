@@ -4,5 +4,23 @@ gem 'hoe'
 gem 'open4'
 gem 'rails', '~> 3.2'
 gem 'devise'
+gem 'devise-encryptable'
+gem 'thin'
+gem 'pg'
+gem 'yaml_db'
 
 gem 'automate-it', :require => 'automateit'
+
+gem 'simple_form'
+gem 'paper_trail'
+
+['haml', 'jquery', 'chosen'].each do |g|
+  gem "#{g}-rails"
+end
+
+#group :assets do
+  gem 'sass-rails',   '~> 3.2.3'
+  gem 'coffee-rails', '~> 3.2.1'
+  gem 'therubyracer', :platforms => :ruby
+  gem 'uglifier', '>= 1.0.3'
+#end

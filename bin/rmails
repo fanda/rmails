@@ -36,7 +36,7 @@ ARGV.options do |opts|
   opts.on("--install")                 { |install| }
   opts.on("--start-app")               { |start|   }
   opts.on("--stop-app")                { |stop|    }
-  opts.on("--clear")                   { |clear|    }
+  opts.on("--clear")                   { |clear|   }
   opts.on_tail("-h", "--help")         { exec "grep ^#/<'#{file}'|cut -c4-" }
   opts.parse!
 end
@@ -44,12 +44,11 @@ end
 
 if (start and stop) or
    (install and (start or stop)) or
-   (not install and not start and not stop)
+   not (install or start or stop)
   exec "grep ^#/<'#{file}'|cut -c4-"
 end # bug that helps to have better condition
 
 if install
-  puts install
   setup = Rmails::Installer.new({:clear => clear})
   setup.run
 
