@@ -8,7 +8,7 @@ package_manager.install %w( ntp perl awstats opendkim )
 # they may be platform-specific
 if tagged?("ubuntu|debian")
   puts 'xx Install apt specific'
-  package_manager.install %w( build-essential libpq-dev )
+  package_manager.install %w( build-essential libpq-dev sudo )
 
   postgres_packages = %w( postgresql )
 
@@ -25,8 +25,8 @@ if tagged?("ubuntu|debian")
     package_manager.install postgres_packages + amavis_packages
     backports_packages = dovecot_packages + dspam_packages
 
-    # we need to use backports - squeeze is actually stable branch
-    backports_source = "deb http://backports.debian.org/debian-backports squeeze-backports main"
+    # we need to use backports - wheezy is actually stable branch
+    backports_source = "deb http://backports.debian.org/debian/ wheezy-backports main"
     edit(:file => "/etc/apt/sources.list") do
       if contains? backports_source
         uncomment backports_source
@@ -36,9 +36,9 @@ if tagged?("ubuntu|debian")
     end
     # update repo system
     puts "Getting Debian backports packages information..."
-    #XXX shell_manager.sh "apt-get update > /dev/null 2>&1"
+    shell_manager.sh "apt-get update > /dev/null 2>&1"
 
-    package_manager.install backports_packages, :backports => 'squeeze-backports'
+    package_manager.install backports_packages, :backports => 'wheezy-backports'
   end
 
 

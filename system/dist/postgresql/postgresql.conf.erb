@@ -8,8 +8,8 @@ listen_addresses = 'localhost'		# what IP address(es) to listen on;
 					# comma-separated list of addresses;
 					# defaults to 'localhost', '*' = all
 					# (change requires restart)
-port = <%= port %>				# (change requires restart)
-max_connections = <%= max_connections %>			# (change requires restart)
+port = <%= port||5432 %>				# (change requires restart)
+max_connections = <%= max_connections||111 %>			# (change requires restart)
 # Note:  Increasing max_connections costs ~400 bytes of shared memory per
 # connection slot, plus lock space (see max_locks_per_transaction).
 
@@ -42,11 +42,11 @@ ssl=false
 #datestyle = 'iso, mdy'
 data_directory = '/var/lib/postgresql/9.1/main'
 # These settings are initialized by initdb, but they can be changed.
-lc_messages = 'en_US.UTF-8'			# locale for system error message
+lc_messages = '<%= `echo $LANG` %>'			# locale for system error message
 					# strings
-lc_monetary = 'en_US.UTF-8'			# locale for monetary formatting
-lc_numeric = 'en_US.UTF-8'			# locale for number formatting
-lc_time = 'en_US.UTF-8'				# locale for time formatting
+lc_monetary = '<%= `echo $LANG` %>'			# locale for monetary formatting
+lc_numeric = '<%= `echo $LANG` %>'			# locale for number formatting
+lc_time = '<%= `echo $LANG` %>'				# locale for time formatting
 
 # default configuration for text search
 default_text_search_config = 'pg_catalog.english'

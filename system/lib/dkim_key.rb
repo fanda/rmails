@@ -1,8 +1,8 @@
 def generate_dkim_key(domain, selector='default')
     sh "opendkim-genkey -r -s #{selector} -d #{domain} -D /etc/ssl/dkim"
     chown 'opendkim', 'opendkim', "/etc/ssl/dkim/#{selector}.private"
-    chown 'opendkim', 'rmails', "/etc/ssl/dkim/#{selector}.txt"
-    chmod 0660, "/etc/ssl/dkim/#{selector}.txt"
+    chperm "/etc/ssl/dkim/#{selector}.txt",
+           :user => 'opendkim', :group => 'rmails', :mode => 0660
 
     # correct bad dns record
     edit "/etc/ssl/dkim/#{selector}.txt" do

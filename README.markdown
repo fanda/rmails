@@ -80,6 +80,12 @@ Web application for administration can be started with
     bin/rmails --start-app
 
 
+TODO
+====
+* Detect Debian version to set backports (wheezy is hardcoded)
+
+
+
 License
 -------
 

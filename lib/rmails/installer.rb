@@ -10,7 +10,7 @@ module Rmails
     def initialize(params={})
       @passwords    = params[:passwords]||[]
       @clear        = params[:clear]
-      @interpreter  = AutomateIt.new(:project => "system")
+      @interpreter  = AutomateIt.new(:project => "#{Rails.root}/system")
       @interpreter.include_in(self)
       @interpreter.set :rake_task, Rake::Task
       @interpreter.set :rails_root, Rails.root
@@ -19,13 +19,17 @@ module Rmails
 
     def run
       @interpreter.invoke '01_prepare_server'
-      Bundler.with_clean_env do
-        @interpreter.shell_manager.sh("bundle install --without development assets")
+      @interpreter.shell_manager.cd Rails.root do
+        Bundler.with_clean_env do
+          @interpreter.shell_manager.sh("bundle install --without development assets")
+        end
       end
       if @clear
         puts '!! Going to TRUNCATE database'
       else
-        @interpreter.shell_manager.sh("rake db:data:dump")
+        @interpreter.shell_manager.cd Rails.root do
+          @interpreter.shell_manager.sh("rake db:data:dump")
+        end
       end
       @interpreter.invoke '02_setup_database'
       @interpreter.invoke '03_setup_postfix'
@@ -37,7 +41,9 @@ module Rmails
       @interpreter.invoke '09_setup_awstats'
       @interpreter.invoke 'XX_start_services'
       unless @clear
-        @interpreter.shell_manager.sh("rake db:data:load")
+        @interpreter.shell_manager.cd Rails.root do
+          @interpreter.shell_manager.sh("rake db:data:load")
+        end
       end
     end
   end

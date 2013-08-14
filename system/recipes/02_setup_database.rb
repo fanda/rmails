@@ -1,3 +1,5 @@
+service_manager.start("postgresql")
+
 puts "?? Installed version of psql is #{`psql --version`=~/\s(\d.\d)\./;$1}"
 
 if tagged?("ubuntu | debian")
@@ -8,8 +10,7 @@ elsif tagged?("fedora | centos")
 
 end
 
-puts etc_postgresql
-#service_manager.stop("postgresql")
+
 
 locals = {
     :port   => lookup('database#port'),
@@ -55,7 +56,10 @@ render  :file => "#{dist}rmails/database.yml.erb",
 # create database schema via ActiveRecord Migrations
 #rake_task["db:migrate"].reenable
 #rake_task["db:migrate"].invoke
-shell_manager.sh "rake db:setup"
+shell_manager.cd rails_root do
+  shell_manager.sh "rake db:migrate"
+  shell_manager.sh "rake db:seed"
+end
 
 # grant privileges for postfix and dovecot roles
 shell_manager.sh "sudo -u postgres psql -d rmails << EOF
