@@ -1,17 +1,17 @@
 server {
   listen 80;
-  server_name stats.example.com;
-  access_log /var/log/nginx/stats.example.com-access_log main;
-  error_log /var/log/nginx/stats.example.com-error_log;
-  root /srv/www/stats.example.com/www;
+  server_name stats.rmails.com;
+  access_log /var/log/nginx/awstats.access_log main;
+  error_log /var/log/nginx/awstats.error_log;
+  root /var/awstats/.html;
   index index.html;
 
      location ~ ^/cgi-bin/(awredir|awstats)\.pl {
          gzip off;
          fastcgi_pass 127.0.0.1:9000;
          fastcgi_param SCRIPT_FILENAME $document_root/cgi-bin.php;
-         fastcgi_param X_SCRIPT_FILENAME /srv/www/stats.example.com/awstats/wwwroot$fastcgi_script_name;
-         fastcgi_param X_SCRIPT_NAME $fastcgi_script_name;
+         fastcgi_param X_SCRIPT_FILENAME /$fastcgi_script_name;
+         fastcgi_param X_SCRIPT_NAME /var/awstats/.html$fastcgi_script_name;
          include fastcgi_params;
      }
 }

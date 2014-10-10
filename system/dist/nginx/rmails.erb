@@ -3,11 +3,10 @@ upstream thin {
   server unix:/tmp/thin.0.sock;
 #  server unix:/tmp/thin.1.sock;
 }
-<% hostname = hostnames.split('_')[0] %>
 server {
   listen      80 default;
-  server_name <%= hostnames %>;
-  root        <%= rmails_root %>/public;
+  server_name manage.rmails.com;
+  root        /opt/rmails/public;
 
   #ssl on;
   #ssl_certificate /etc/ssl/certs/https.pem
@@ -16,12 +15,12 @@ server {
   if ($request_method !~ ^(GET|HEAD|PUT|POST|DELETE|OPTIONS)$ ){
     return 405;
   }
-  #if ($host = '<%#= subhostname %><%= hostname %>' ) {
-  #  rewrite  ^/(.*)$  http://<%= '' %><%= hostname %>/$1  permanent;
+  #if ($host = 'manage.rmails.com' ) {
+  #  rewrite  ^/(.*)$  http://manage.rmails.com/$1  permanent;
   #}
 
   location ~ ^/s/(.*)$ {
-    alias  <%= awstats_out||'/var/awstats' %>/.html/$1;
+    alias  /var/awstats/.html/$1;
   }
   location / {
     proxy_set_header  X-Real-IP  $remote_addr;
@@ -56,8 +55,8 @@ server {
 
 
 
-  access_log /var/log/nginx/<%= hostname %>/access.log;
-  error_log /var/log/nginx/<%= hostname %>/error.log;
+  access_log /var/log/nginx/manage.rmails.com/access.log;
+  error_log /var/log/nginx/manage.rmails.com/error.log;
 
   error_page   500 502 504  /500.html;
 }

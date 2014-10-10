@@ -41,6 +41,7 @@ Getting Started
 
 ### GIT (recommended)
 
+You need bundler gem installed.
 
 Use git for installation:
 

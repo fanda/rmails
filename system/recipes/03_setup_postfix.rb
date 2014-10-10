@@ -91,7 +91,7 @@ locals = {
 render(
     :file   => "#{dist}postfix/mailname.erb",
     :to     => "/etc/mailname",
-    :mode   => 0660,
+#    :mode   => 0660,
     :locals => locals
 )
 

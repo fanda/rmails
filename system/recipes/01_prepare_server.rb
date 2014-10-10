@@ -10,7 +10,7 @@ if tagged?("ubuntu|debian")
   puts 'xx Install apt specific'
   package_manager.install %w( build-essential libpq-dev sudo )
 
-  postgres_packages = %w( postgresql )
+  postgres_packages = []#%w( postgresql )
 
   dovecot_packages = %w( dovecot-core dovecot-pgsql dovecot-pop3d dovecot-imapd dovecot-sieve dovecot-managesieved dovecot-lmtpd )
   dspam_packages = %w( dspam libdspam7-drv-pgsql )
